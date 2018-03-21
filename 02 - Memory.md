@@ -130,5 +130,72 @@ the **IMemoryStream** interface, and is connected to several **IMemoryBank** ins
 
 ## Testing
 
+Before start writing some implementations, we can start by writing some tests, and to be more specifc, test interfaces.
+As we go with _JUnit5_ test interface is now supported and can be used to design our tests more efficently. Indeed,
+we only have interfaces to work on, and since we will have several implemetations for those interfaces, having generic
+test is a good start to validate our choices and having a strong validation procedure while writing implementation code.
+
+How testing memory ? The idea is to assume a particular memory state, enough simple to write test for it, but still enough
+complex to cover as much usage case as we could. Two cases that we can easily cover are :
+
+- Address out of range
+- Reading expected value
+
+We will assume for our tests that we work on a memory which has following properties :
+
+- [4, 6] Address space
+- $4 = 10101010
+- $5 = 11110000
+- $6 = 00000000
+
+The first two addresses aims to be used for memory reading operation testing, and the last one for writing.
+We will start by the higher abstraction level available, which is the **IMemoryStream** interface here :
+
+```java
+public interface IMemoryStreamTest {
+
+    static final int TEST_SIZE = 3;
+    static final int TEST_OFFSET = 4;
+
+    IMemoryStream getTestMemoryStream();
+    
+    default void performStreamTest(final Consumer<IMemoryStream> test) {
+		final IMemoryStream stream = getTestMemoryStream();
+		assertNotNull(stream);
+		test.accept(stream);
+	}
+
+}
+```
+
+We define some scenario related constants, as well as a factory method that should be use to retrieve a testing instance.
+Finally a shortcut method for performing a test defined as an **IMemoryStream** consumer. Now we can write two tests that
+will respectively ensure that uncovered address access will throw an **IllegalAccessException**, and value located at _$4_
+and _$5_ are the one expected.
+
+```java
+@Test
+default void testUnallowedReading() {
+    performStreamTest(stream -> {
+        assertThrows(IllegalAccessException.class, () -> stream.readByte(TEST_OFFSET - 1));
+        assertThrows(IllegalAccessException.class, () -> stream.readByte(TEST_OFFSET + TEST_SIZE));
+    });
+}
+
+@Test
+default void testAllowedReading() {
+    performStreamTest(stream -> {
+        try {
+            assertEquals(85, stream.readByte(TEST_OFFSET));
+            assertEquals(15, stream.readByte(TEST_OFFSET + 1));
+        }
+        catch (final IllegalAccessException e) {
+            fail(e);
+        }			
+    });
+}
+```
+
+
 ## Implementation
 
