@@ -294,7 +294,7 @@ method.
 A concrete implementation relies on a specific datastructure, for storing and indexing associated
 memory block. The most naïve one, and probably the most efficient, is to use a single **byte** array.
 Some other based on **java.lang.BitSet** for example could be used, efficienty can be benchmarked
-so we can should the best fit. We can also have _read-oriented_ or _write_oriented_ depending on
+so we can choose the best fit. We can also have _read-oriented_ or _write-oriented_ depending on
 assumed memory usage. We will only go for the array based here, but more implementations can be found
 on the project repository.
 
