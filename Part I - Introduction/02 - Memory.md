@@ -437,3 +437,54 @@ public static final class Builder {
 
 }
 ```
+
+### Address bus
+
+```java
+public final class AddressBus implements IMemoryStream {
+
+	private final NavigableMap<Integer, IMemoryBank> memory;
+
+	public AddressBus() {
+		this.memory = new TreeMap<>();
+	}
+
+	public void connect(final IMemoryBank memoryBank) {
+		if (memoryBank == null) {
+			throw new IllegalArgumentException();
+		}
+		// final int offset = memoryBlock.getOffset();
+		// TODO : Check for address conflict.
+		memory.put(memoryBank.getOffset(), memoryBank);
+	}
+
+	public void disconnect(final IMemoryBank memoryBank) {
+		if (memoryBank == null) {
+			throw new IllegalArgumentException();
+		}
+		if (memory.remove(memoryBank.getOffset()) == null) {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	private IMemoryStream getMemoryStream(final int address) throws IllegalAccessException {
+		final Integer nearAddressableOffset = memory.floorKey(address);
+		if (nearAddressableOffset == null) {
+			throw new IllegalAccessException("Unreachable memory address");
+		}
+		// TODO : Check for more coverage ?
+		return memory.get(nearAddressableOffset);
+	}
+
+	@Override
+	public byte readByte(final int address) throws IllegalAccessException {
+		return getMemoryStream(address).readByte(address);
+	}
+
+	@Override
+	public void writeByte(final byte value, final int address) throws IllegalAccessException {
+		getMemoryStream(address).writeByte(value, address);
+	}
+
+}
+```
