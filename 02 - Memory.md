@@ -282,8 +282,13 @@ public abstract class AbstractMemoryBank implements IMemoryBank {
 	@Override public final int getOffset() { return offset; }
 
 }
-
 ```
+
+Nothing magic here, the only noticeable point is the **protected** method **verifyAddress(int)**
+which ensures that a given address is covered by this bank. This will avoid code duplication
+over addressing control since we will perform such operation all the time we write an access
+method.
+
 ### Concrete implementation
 
 A concrete implementation relies on a specific datastructure, for storing and indexing associated
@@ -294,7 +299,27 @@ assumed memory usage. We will only go for the array based here, but more impleme
 on the project repository.
 
 ```java
+public final class ArrayMemoryBank extends AbstractMemoryBank {
 
+    private final byte[] data;
+
+    public ArrayMemoryBank(final int size, final int offset) {
+        super(size, offset);
+		this.data = new byte[size];
+	}
+
+	@Override
+	public byte readByte(final int address) throws IllegalAccessException {
+		verifyAddress(address);
+		return data[address - getOffset()];
+	}
+
+	@Override
+	public void writeByte(final byte value, final int address) throws IllegalAccessException {
+		verifyAddress(address);
+		data[address - getOffset()] = value;
+	}
+}
 ```
 
 ### Strategy based implementation
