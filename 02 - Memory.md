@@ -2,7 +2,7 @@
 
 TODO : Introductive text.
 
-##
+## TODO : Title for memory theory.
 
 ### Address space
 
@@ -76,12 +76,12 @@ represents our overall memory :
 - An **AddressBus**
 - Various memory banks
 
-But before diving into it, we will define behavior we need from our memory :
+But before diving into it, we will define behaviors we need from our memory :
 
 - Read a byte at a given address.
 - Write a byte at a given address.
 
-That is quite straightforward, we can totally write an interface for it :
+That is quite straightforward, we can write an interface for it :
 
 ```java
 public interface IMemoryStream {
@@ -105,6 +105,28 @@ address space. In order to ensure a given address is valid regarding of the addr
 an signed **int** which can cover the required range. Another option is to effectively use a **short**
 and build the real address on the fly by computing the unsigned value from bits, but since we aims to use
 addresses for memory indexing in a time efficient datastructure, this choice wasn't retained.
+
+We now have made some choices, in how we reach the memory. We will continue then by modeling how we will
+organizes objects to represents it. As said earlier, we want to represent an address bus, which will be
+the central point for accessing memory. Our address bus will receive I/O operation through the **IMemoryStream**
+interface and delegate query to the appropriate memory bank regarding of the provided address. Since we will
+have several memory bank types, we will define a generic high level **IMemoryBank** interface, which extends
+the previously defined **IMemoryStream** :
+
+```java
+public interface IMemoryBank extends IMemoryStream {
+
+    int getSize();
+
+	int getOffset();
+
+}
+```
+
+The idea here is quite simple, a memory bank is defined by a _size_ (expressed in number of byte), and an
+_offset_ which correspond to the starting address this bank is reachable from. The address covered by such
+object will be then _[size, size + offset]_
+
 
 ## Testing
 
