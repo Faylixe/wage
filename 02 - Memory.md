@@ -24,12 +24,37 @@ Nothing more, nothing less.
 
 The address space is the range of address that can be reached through your address bus. In case of
 the gameboy, the address bus has a 16-bit size, which means we can transit address of 16-bit size
-through it. It can then vary between 0 and 2<sup>16</sup> - 1
-
-### Memory banking
+through it. It can then vary between 0 and 2<sup>16</sup> - 1, so 65536 addresses available.
 
 ### Memory map
 
+As we said previously, you can and you will have several memory in your system. Global working RAM,
+ROM, video dedicated RAM, and so on, but the address space is unique, and the way a subset of the
+address space is allocated to a specific memory instance is what we call the _memory map_.
+
+The _memory map_ is a specification that splits the address space in subsets that are dedicated
+to a particular block of memory. Following table describes the  _memory map_ associated to the
+gameboy address bus :
+
+| Address range | Target                    |
+| ------------- | ------------------------- |
+| $0000 - $3FFF | ROM bank 00               |
+| $4000 - $7FFF | ROM bank 01 - NN          |
+| $8000 - $9FFF | VRAM                      |
+| $A000 - $BFFF | External RAM              |
+| $C000 - $CFFF | WRAM bank 0               |
+| $D000 - $DFFF | WRAM bank 1               |
+| $E000 - $FDFF | $C000 - $DDFF mirror      |
+| $FE00 - $FE9F | OAM                       |
+| $FEA0 - $FEFF | Not usable                |
+| $FF00 - $FF7F | I/O registers             |
+| $FF80 - $FFFE | HRAM                      |
+| $FFFF - $FFFF | Interrupt enable register |
+
+TODO : Recommand having it all the time.
+
+
+### Memory banking
 
 ## Design
 
