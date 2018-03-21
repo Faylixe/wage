@@ -196,6 +196,8 @@ default void testAllowedReading() {
 }
 ```
 
+TODO : Note on 85 and 15 value computation.
+
 And that's it ! Such test interface can be now reused for any test that cover a class which implements the **IMemoryStream**
 interface. This testing strategy will be used through all this project. We can move to a deeper level, which is the
 **IMemoryBank** interface. Since **IMemoryBank** is an **IMemoryStream**, we can write a test interface for it which also
@@ -229,7 +231,7 @@ Here we will only write two simple tests, which cover expected properties value 
 ```java
 @Test
 default void testBankSize() {
-	performBankTest(bank -> assertEquals(TEST_SIZE, bank.getSize()));
+    performBankTest(bank -> assertEquals(TEST_SIZE, bank.getSize()));
 }
 
 @Test
