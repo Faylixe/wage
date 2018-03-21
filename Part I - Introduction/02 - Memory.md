@@ -415,15 +415,15 @@ public static final class Builder {
     public Builder addMemoryBank(final IMemoryBank bank) {
         if (bank == null) {
             throw new IllegalArgumentException("Null bank");
-		}
-		if (bank.getSize() != size) {
-			throw new IllegalArgumentException("Size not matching");
-		}
-		if (bank.getOffset() != offset) {
-			throw new IllegalArgumentException("Offset not matching");
-		}
-		banks.add(bank);
-		return this;
+        }
+        if (bank.getSize() != size) {
+            throw new IllegalArgumentException("Size not matching");
+        }
+        if (bank.getOffset() != offset) {
+            throw new IllegalArgumentException("Offset not matching");
+        }
+        banks.add(bank);
+        return this;
 	}
 
 	public SwitchableMemoryBank build() {
