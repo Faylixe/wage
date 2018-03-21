@@ -246,7 +246,7 @@ them.
 
 ## Implementation
 
-Alright, we are now close to have a memory working, and that we now it will work as expected thanks
+Alright, we are now close to have a working memory, and that we now it will work as expected thanks
 to written unit tests. But first we need to define exactly our required components. The most obvious
 one is the address bus, but we will handle it at the end, as it aims to represent the central access
 point and then has dependencies with every other memory related components. The other components are
@@ -322,3 +322,118 @@ public final class ArrayMemoryBank extends AbstractMemoryBank {
 ```
 
 ### Strategy based implementation
+
+#### ROM (Read Only Memory)
+
+```java
+public final class ReadOnlyMemoryBank implements IMemoryBank {
+
+	private final IMemoryBank delegate;
+
+	public ReadOnlyMemoryBank(final IMemoryBank delegate) {
+		this.delegate = delegate;
+	}
+
+	@Override
+	public int getSize() {
+		return delegate.getSize();
+	}
+
+	@Override
+	public int getOffset() {
+		return delegate.getOffset();
+	}
+
+	@Override
+	public void writeByte(final byte value, final int address) throws IllegalAccessException {
+		throw new IllegalAccessException("Attemping to write into read only memory block.");
+	}
+
+	@Override
+	public byte readByte(final int address) throws IllegalAccessException {
+		return delegate.readByte(address);
+	}
+
+}
+```
+
+#### Switchable bank
+
+```java
+
+public final class SwitchableMemoryBank extends AbstractMemoryBank {
+
+	private final IMemoryStream [] banks;
+	private final AtomicInteger current;
+
+	private SwitchableMemoryBank(
+			final IMemoryBank [] banks,
+			final int size,
+			final int offset) {
+		super(size, offset);
+		this.banks = banks;
+		this.current = new AtomicInteger();
+	}
+
+	public int getBankSize() {
+		return banks.length;
+	}
+
+	public void switchBank(final int target) {
+		if (target < 0 || target >= banks.length) {
+			throw new IllegalArgumentException();
+		}
+		current.set(target);
+	}
+
+	@Override
+	public byte readByte(final int address) throws IllegalAccessException {
+		return banks[current.get()].readByte(address);
+	}
+
+	@Override
+	public void writeByte(final byte value, final int address) throws IllegalAccessException {
+		banks[current.get()].writeByte(value, address);
+	}
+
+}
+```
+
+```java
+public static final class Builder {
+
+    private final int size;
+    private final int offset;
+    private final List<IMemoryBank> banks;
+
+    private Builder(final int size, final int offset) {
+        this.size = size;
+		this.offset = offset;
+        this.banks = new ArrayList<IMemoryBank>();
+	}
+
+    public Builder addMemoryBank(final IMemoryBank bank) {
+        if (bank == null) {
+			throw new IllegalArgumentException("Null bank");
+		}
+		if (bank.getSize() != size) {
+			throw new IllegalArgumentException("Size not matching");
+		}
+		if (bank.getOffset() != offset) {
+			throw new IllegalArgumentException("Offset not matching");
+		}
+		banks.add(bank);
+		return this;
+	}
+
+	public SwitchableMemoryBank build() {
+		if (banks.isEmpty()) {
+			throw new IllegalStateException("No bank available");
+		}
+		final IMemoryBank [] switchable = new IMemoryBank[banks.size()];
+		banks.toArray(switchable);
+		return new SwitchableMemoryBank(switchable, size, offset);
+	}
+
+}
+```
