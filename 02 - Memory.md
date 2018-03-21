@@ -196,6 +196,47 @@ default void testAllowedReading() {
 }
 ```
 
+And that's it ! Such test interface can be now reused for any test that cover a class which implements the **IMemoryStream**
+interface. This testing strategy will be used through all this project. We can move to a deeper level, which is the
+**IMemoryBank** interface. Since **IMemoryBank** is an **IMemoryStream**, we can write a test interface for it which also
+extends the test interface associated to **IMemoryStream** as following :
+
+```java
+public interface IMemoryBankTest extends IMemoryStreamTest {
+
+    IMemoryBank getTestMemoryBank();
+
+    @Override
+    default IMemoryStream getTestMemoryStream() {
+        return getTestMemoryBank();
+    }
+
+    default void performBankTest(final Consumer<IMemoryBank> test) {
+        final IMemoryBank bank = getTestMemoryBank();
+        assertNotNull(bank);
+        test.accept(bank);
+    }
+
+}
+```
+
+As for the previous test interface, we have a factory method, as well as a shortcut method for performing
+a memory bank related test. The only difference here, is that we implements the parent abstract method
+**IMemoryStreamTest#getTestMemoryStream()** which delegate the call to the bank related factory method.
+
+Here we will only write two simple tests, which cover expected properties value :
+
+```java
+@Test
+default void testBankSize() {
+	performBankTest(bank -> assertEquals(TEST_SIZE, bank.getSize()));
+}
+
+@Test
+default void testBankOffset() {
+    performBankTest(bank -> assertEquals(TEST_OFFSET, bank.getOffset()));
+}
+```
 
 ## Implementation
 
