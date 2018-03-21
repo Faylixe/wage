@@ -6,25 +6,25 @@ TODO : Introductive text.
 
 ### Address space
 
-Before talking of address space, let's review the fundamental about how memory is managed by
-a CPU or any processing unit that which to access to a memory. While investingating over
-documentation, lot of concept emerge and don't be affraid to admit it, you have sometime no
-clue about what is it about. Opcode, Address bus, instruction set, ALU, ... so many knowledges
-that at some point in your learning path you probably have seen, but totally forgot since you
-never manipulate them in a real project, or use it in your daily job.
+Before talking about address space, let's review the fundamental about how memory is managed by
+a CPU or any processing unit that whishes to access a memory. Whilst investingating 
+documentation, lots of concept emerges and (don't be affraid to admit it) you sometime have no
+clue about what it is about. Opcode, Address bus, instruction set, ALU, ... So many terminlogies
+that at some point in your learning path you'll probably have seen, but totally forgot about because you
+never used them in a real project, or in your daily job.
 
 Addressing is one of them, and more generally, how memory is designed in a low level / hardware
-point of view. Memory, or memories has you can have several memory in your system, is connected
-to the CPU (and yet all other processing unit) through an address bus and a data bus.
+point of view. Memory, or memories as you can have several in your system, is connected
+to the CPU (and all other processing units) through an address bus and data bus.
 
-When a unit need to read the memory, it put the requested memory address in the address bus. Then
-the associated data is put in the data bus that the unit can read. When a unit need to write the
-memory, it put the target memory address in the address bus, and the target data in the data bus.
+When a unit needs to read the memory, it puts the requested memory address on the address bus. The
+associated data is then put on the data bus that the unit can read. When a unit needs to write to
+memory, it puts the target memory address on the address bus and the target data on the data bus.
 Nothing more, nothing less.
 
-The address space is the range of address that can be reached through your address bus. In case of
-the gameboy, the address bus has a 16-bit size, which means we can transit address of 16-bit size
-through it. It can then vary between 0 and 2<sup>16</sup> - 1, so 65536 addresses available.
+The address space is the range of addresses that can be reached through your address bus. In case of
+the gameboy, the address bus is 16-bit wide. Thus your memory address varies between 0 and 2<sup>16</sup> - 1, 
+so 65536 addresses available.
 
 ### Memory map
 
@@ -34,8 +34,8 @@ address space is allocated to a specific memory instance is what we call the _me
 
 The _memory map_ is a specification that splits the address space in subsets that are dedicated
 to a particular block of memory. Following table describes the _memory map_ associated to the
-gameboy address bus, but keep in mind that you can easily a more detailled memory map with slot
-description, map variation depending on console model.
+gameboy address bus, but keep in mind that you can easily have a more detailled memory map with slot
+description and/or map variation depending on console model.
 
 | Address range | Target                    |
 | ------------- | ------------------------- |
@@ -52,16 +52,15 @@ description, map variation depending on console model.
 | $FF80 - $FFFE | HRAM                      |
 | $FFFF - $FFFF | Interrupt enable register |
 
-Please note the used address notation, as it will be the same through all the book and probably on
-most documentation you will find over the web. An address is prefixed by the dollar sign, and consists
-in 4 digits, using hexadecimal notation, which represents the effective 16-bit address. Remember, 16-bit,
-where 8-bit define a byte, which can be written as a two hexadecimal digits. If you don't get it, google it
-and do the math. I recommand having the _memory map_ close to you all the time, using a post it,
-a printed sheet, or a browser tab, it is your call.
+Please note the used address notation, as it will be the same throughout all the book and most likely on
+documentation you will find over the web. An address is prefixed by the dollar sign, and consists
+of 4 digits, using hexadecimal notation, which represents the effective 16-bit address. Remember, 16-bit,
+where 8-bit define a byte, which can be written as two hexadecimal digits. I recommand having this _memory map_ 
+close to you at all times using a post it, a printed sheet, or a browser tab, it is your call.
 
 ### Memory banking
 
-On some _memory map_ items, you can notice that some target are labelled with "bank" following by an
+On some _memory map_ items, you can notice that some target are labelled with "bank" followed by a
 numeric identifier : this refers to another concept that is _memory banking_.
 
 TODO : Switchable memory bank.
@@ -69,19 +68,19 @@ TODO : Switchable memory bank.
 ## Design
 
 Alright, now we are a little bit more confortable in how memory works, we can start doing some system
-design for it. Since with are using **Java** language, we will think in an oriented object manner,
-which is good as we can see a gameboy as a composition of several object, and here is what we need to
-represents our overall memory :
+design. Since we are using **Java**, we will think in an oriented object manner,
+which is good as we can see a gameboy as a composition of several objects and here is what we need to
+represent our overall memory :
 
 - An **AddressBus**
 - Various memory banks
 
 But before diving into it, we will define behaviors we need from our memory :
 
-- Read a byte at a given address.
-- Write a byte at a given address.
+- Read a byte at a given address
+- Write a byte at a given address
 
-That is quite straightforward, we can write an interface for it :
+This is quite straightforward, we can write an interface for it :
 
 ```java
 public interface IMemoryStream {
@@ -93,25 +92,24 @@ public interface IMemoryStream {
 }
 ```
 
-Despite how simple the interface is, we already face lot of issues here. First of all the storage aspect,
-each memory cell is represented by a **byte** value, which is 8-bit long in _Java_. Since an gameboy address
-reach a 8-bit block of data this is perfect, no memory waste, but all primitive types in _Java_ are signed.
-We should then keep this fact in mind when we will implements artihmetic operations later. The second main
-issues is the address storage type : we went for a **int** here which is 32-bit long. This means that we will
-use twice the amount of memory required to store an address since address are 16-bit long for the gameboy.
+Despite how simple the interface is, we already face lots of issues here. First of all the storage aspect,
+each memory cell is represented by a **byte** value, which is 8-bit long in _Java_. Since a gameboy address
+reaches an 8-bit block of data this is perfect, no memory waste, but all primitive types in _Java_ are signed.
+We should then keep this fact in mind when we will implement artihmetic operations later. The second main
+issue is the address storage type : we went for an **int** here which is 32-bit long. This means that we will
+use twice the amount of memory required to store an address since the gameboy only has a 16-bit wide address space.
 Why not going for the **short** type which is *16-bit* long ? Well as for the storage aspect, **short**
-value are signed, which implies that values can go between -32768 and 32767 or we want an [0, 65536]
-address space. In order to ensure a given address is valid regarding of the address space, we then use
-an signed **int** which can cover the required range. Another option is to effectively use a **short**
-and build the real address on the fly by computing the unsigned value from bits, but since we aims to use
+values are signed, which implies that values can go between -32768 and 32767. We want an [0, 65536]
+address space. In order to ensure a given address is valid regardless of the address space, we use
+a signed **int** which can cover the required range. Another option is to effectively use a **short**
+and build the real address on the fly by computing the unsigned value from bits, but since we aim to use
 addresses for memory indexing in a time efficient datastructure, this choice wasn't retained.
 
 We now have made some choices, in how we reach the memory. We will continue then by modeling how we will
-organizes objects to represents it. As said earlier, we want to represent an address bus, which will be
+organize objects to represents it. As said earlier, we want to represent an address bus, which will be
 the central point for accessing memory. Our address bus will receive I/O operation through the **IMemoryStream**
-interface and delegate query to the appropriate memory bank regarding of the provided address. Since we will
-have several memory bank types, we will define a generic high level **IMemoryBank** interface, which extends
-the previously defined **IMemoryStream** :
+interface and delegate query to the appropriate memory bank. Since we will have several memory bank types, 
+we will define a generic high level **IMemoryBank** interface, which extends the previously defined **IMemoryStream** :
 
 ```java
 public interface IMemoryBank extends IMemoryStream {
@@ -125,18 +123,18 @@ public interface IMemoryBank extends IMemoryStream {
 
 The idea here is quite simple, a memory bank is defined by a _size_ (expressed in number of byte), and an
 _offset_ which correspond to the starting address this bank is reachable from. The address covered by such
-object will be then _[offset, offset + size]_. Finally our address bus will be then a simple class that implements
-the **IMemoryStream** interface, and is connected to several **IMemoryBank** instance.
+object will then be _[offset, offset + size]_. Finally our address bus will then be a simple class that implements
+the **IMemoryStream** interface and is connected to several **IMemoryBank** instances.
 
 ## Testing
 
-Before start writing some implementations, we can start by writing some tests, and to be more specifc, test interfaces.
-As we go with _JUnit5_ test interface is now supported and can be used to design our tests more efficently. Indeed,
-we only have interfaces to work on, and since we will have several implemetations for those interfaces, having generic
+Before we start writing some implementations, we can write some tests, or to be more specific, test interfaces.
+As we'll use _JUnit5_, test interfaces are now supported and can be used to design our tests more efficiently. Indeed,
+we only have interfaces to work on and since we will have several implemetations for those interfaces, having a generic
 test is a good start to validate our choices and having a strong validation procedure while writing implementation code.
 
-How testing memory ? The idea is to assume a particular memory state, enough simple to write test for it, but still enough
-complex to cover as much usage case as we could. Two cases that we can easily cover are :
+How do we test memory ? The idea is to assume a particular memory state, simple enough to write tests for it, but still complex 
+enough to cover as much usage case as we could. Two cases that we can easily cover are :
 
 - Address out of range
 - Reading expected value
@@ -144,11 +142,11 @@ complex to cover as much usage case as we could. Two cases that we can easily co
 We will assume for our tests that we work on a memory which has following properties :
 
 - [4, 6] Address space
-- $4 = 10101010
-- $5 = 11110000
-- $6 = 00000000
+- $4 = 0b10101010
+- $5 = 0b11110000
+- $6 = 0b00000000
 
-The first two addresses aims to be used for memory reading operation testing, and the last one for writing.
+The first two addresses aim to be used for memory reading operation testing, and the last one for writing.
 We will start by the higher abstraction level available, which is the **IMemoryStream** interface here :
 
 ```java
@@ -170,7 +168,7 @@ public interface IMemoryStreamTest {
 
 We define some scenario related constants, as well as a factory method that should be use to retrieve a testing instance.
 Finally a shortcut method for performing a test defined as an **IMemoryStream** consumer. Now we can write two tests that
-will respectively ensure that uncovered address access will throw an **IllegalAccessException**, and value located at _$4_
+will respectively ensure that uncovered address access will throw an **IllegalAccessException** and that the value located at _$4_
 and _$5_ are the one expected.
 
 ```java
@@ -198,10 +196,11 @@ default void testAllowedReading() {
 
 TODO : Note on 85 and 15 value computation.
 
-And that's it ! Such test interface can be now reused for any test that cover a class which implements the **IMemoryStream**
-interface. This testing strategy will be used through all this project. We can move to a deeper level, which is the
+That's it ! Such test interface can now be reused for any test that covers a class which implements the **IMemoryStream**
+interface. This testing strategy will be used throughout all this project. We can now move to a deeper level, which is the
+
 **IMemoryBank** interface. Since **IMemoryBank** is an **IMemoryStream**, we can write a test interface for it which also
-extends the test interface associated to **IMemoryStream** as following :
+extends the test interface associated to **IMemoryStream** as follows :
 
 ```java
 public interface IMemoryBankTest extends IMemoryStreamTest {
@@ -222,11 +221,11 @@ public interface IMemoryBankTest extends IMemoryStreamTest {
 }
 ```
 
-As for the previous test interface, we have a factory method, as well as a shortcut method for performing
-a memory bank related test. The only difference here, is that we implements the parent abstract method
-**IMemoryStreamTest#getTestMemoryStream()** which delegate the call to the bank related factory method.
+As for the previous test interface, we have a factory method as well as a shortcut method for performing
+a memory bank related test. The only difference here is that we implement the parent abstract method
+**IMemoryStreamTest#getTestMemoryStream()** which delegates the call to the bank related factory method.
 
-Here we will only write two simple tests, which cover expected properties value :
+Here we will only write two simple tests which cover expected properties value :
 
 ```java
 @Test
