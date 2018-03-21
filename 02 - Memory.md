@@ -10,7 +10,7 @@ Before talking of address space, let's review the fundamental about how memory i
 a CPU or any processing unit that which to access to a memory. While investingating over
 documentation, lot of concept emerge and don't be affraid to admit it, you have sometime no
 clue about what is it about. Opcode, Address bus, instruction set, ALU, ... so many knowledges
-that at some point in your learning path you probably have seen, but totally forgot has you
+that at some point in your learning path you probably have seen, but totally forgot since you
 never manipulate them in a real project, or use it in your daily job.
 
 Addressing is one of them, and more generally, how memory is designed in a low level / hardware
