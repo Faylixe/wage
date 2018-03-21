@@ -240,5 +240,61 @@ default void testBankOffset() {
 }
 ```
 
+We are done for the testing part, at least the generic part of it, and we can now move on writing actual
+code that will implement our interfaces and more effectivly, implement our emulator memory. keep in mind
+that some other concrete test class will be written as long as we write implementation class to validate
+them.
+
 ## Implementation
 
+Alright, we are now close to have a memory working, and that we now it will work as expected thanks
+to written unit tests. But first we need to define exactly our required components. The most obvious
+one is the address bus, but we will handle it at the end, as it aims to represent the central access
+point and then has dependencies with every other memory related components. The other components are
+simply memory banks, which can be divided in two categories :
+
+- Concrete memory bank implementation which can vary due to the used data storage representation.
+- Strategy based memory bank implementation, like read only, or switchable.
+
+### Base implementation.
+
+First of all, we can write an **abstract** base class for generic behavior : no need
+to duplicate _size_ and _offset_ managment for each implementation we will write :
+
+```java
+public abstract class AbstractMemoryBank implements IMemoryBank {
+
+	private final int size;
+	private final int offset;
+
+	public AbstractMemoryBank(final int size, final int offset) {
+		this.size = size;
+		this.offset = offset;
+	}
+
+	protected final void verifyAddress(final int address) throws IllegalAccessException {
+		if (address < getOffset() || address >= (getOffset() + getSize())) {
+			throw new IllegalAccessException();
+		}
+	}
+
+	@Override public final int getSize() { return size; }
+	@Override public final int getOffset() { return offset; }
+
+}
+
+```
+### Concrete implementation
+
+A concrete implementation relies on a specific datastructure, for storing and indexing associated
+memory block. The most naïve one, and probably the most efficient, is to use a single **byte** array.
+Some other based on **java.lang.BitSet** for example could be used, efficienty can be benchmarked
+so we can should the best fit. We can also have _read-oriented_ or _write_oriented_ depending on
+assumed memory usage. We will only go for the array based here, but more implementations can be found
+on the project repository.
+
+```java
+
+```
+
+### Strategy based implementation
