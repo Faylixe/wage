@@ -33,8 +33,9 @@ ROM, video dedicated RAM, and so on, but the address space is unique, and the wa
 address space is allocated to a specific memory instance is what we call the _memory map_.
 
 The _memory map_ is a specification that splits the address space in subsets that are dedicated
-to a particular block of memory. Following table describes the  _memory map_ associated to the
-gameboy address bus :
+to a particular block of memory. Following table describes the _memory map_ associated to the
+gameboy address bus, but keep in mind that you can easily a more detailled memory map with slot
+description, map variation depending on console model.
 
 | Address range | Target                    |
 | ------------- | ------------------------- |
@@ -51,8 +52,12 @@ gameboy address bus :
 | $FF80 - $FFFE | HRAM                      |
 | $FFFF - $FFFF | Interrupt enable register |
 
-TODO : Recommand having it all the time.
-
+Please note the used address notation, as it will be the same through all the book and probably on
+most documentation you will find over the web. An address is prefixed by the dollar sign, and consists
+in 4 digits, using hexadecimal notation, which represents the effective 16-bit address. Remember, 16-bit,
+where 8-bit define a byte, which can be written as a two hexadecimal digits. If you don't get it, google it
+and do the math. I recommand having the _memory map_ close to you all the time, using a post it,
+a printed sheet, or a browser tab, it is your call.
 
 ### Memory banking
 
