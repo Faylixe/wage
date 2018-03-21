@@ -22,7 +22,9 @@ the associated data is put in the data bus that the unit can read. When a unit n
 memory, it put the target memory address in the address bus, and the target data in the data bus.
 Nothing more, nothing less.
 
-
+The address space is the range of address that can be reached through your address bus. In case of
+the gameboy, the address bus has a 16-bit size, which means we can transit address of 16-bit size
+through it. It can then vary between 0 and 2<sup>16</sup> - 1
 
 ### Memory banking
 
