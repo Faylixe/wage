@@ -194,8 +194,11 @@ default void testAllowedReading() {
 }
 ```
 
+TODO : Note on 85 and 15 value computation.
+
 That's it ! Such test interface can now be reused for any test that covers a class which implements the **IMemoryStream**
 interface. This testing strategy will be used throughout all this project. We can now move to a deeper level, which is the
+
 **IMemoryBank** interface. Since **IMemoryBank** is an **IMemoryStream**, we can write a test interface for it which also
 extends the test interface associated to **IMemoryStream** as follows :
 
@@ -227,7 +230,7 @@ Here we will only write two simple tests which cover expected properties value :
 ```java
 @Test
 default void testBankSize() {
-	performBankTest(bank -> assertEquals(TEST_SIZE, bank.getSize()));
+    performBankTest(bank -> assertEquals(TEST_SIZE, bank.getSize()));
 }
 
 @Test
@@ -236,5 +239,86 @@ default void testBankOffset() {
 }
 ```
 
+We are done for the testing part, at least the generic part of it, and we can now move on writing actual
+code that will implement our interfaces and more effectivly, implement our emulator memory. keep in mind
+that some other concrete test class will be written as long as we write implementation class to validate
+them.
+
 ## Implementation
 
+Alright, we are now close to have a memory working, and that we now it will work as expected thanks
+to written unit tests. But first we need to define exactly our required components. The most obvious
+one is the address bus, but we will handle it at the end, as it aims to represent the central access
+point and then has dependencies with every other memory related components. The other components are
+simply memory banks, which can be divided in two categories :
+
+- Concrete memory bank implementation which can vary due to the used data storage representation.
+- Strategy based memory bank implementation, like read only, or switchable.
+
+### Base implementation.
+
+First of all, we can write an **abstract** base class for generic behavior : no need
+to duplicate _size_ and _offset_ managment for each implementation we will write :
+
+```java
+public abstract class AbstractMemoryBank implements IMemoryBank {
+
+	private final int size;
+	private final int offset;
+
+	public AbstractMemoryBank(final int size, final int offset) {
+		this.size = size;
+		this.offset = offset;
+	}
+
+	protected final void verifyAddress(final int address) throws IllegalAccessException {
+		if (address < getOffset() || address >= (getOffset() + getSize())) {
+			throw new IllegalAccessException();
+		}
+	}
+
+	@Override public final int getSize() { return size; }
+	@Override public final int getOffset() { return offset; }
+
+}
+```
+
+Nothing magic here, the only noticeable point is the **protected** method **verifyAddress(int)**
+which ensures that a given address is covered by this bank. This will avoid code duplication
+over addressing control since we will perform such operation all the time we write an access
+method.
+
+### Concrete implementation
+
+A concrete implementation relies on a specific datastructure, for storing and indexing associated
+memory block. The most naïve one, and probably the most efficient, is to use a single **byte** array.
+Some other based on **java.lang.BitSet** for example could be used, efficienty can be benchmarked
+so we can choose the best fit. We can also have _read-oriented_ or _write-oriented_ depending on
+assumed memory usage. We will only go for the array based here, but more implementations can be found
+on the project repository.
+
+```java
+public final class ArrayMemoryBank extends AbstractMemoryBank {
+
+    private final byte[] data;
+
+    public ArrayMemoryBank(final int size, final int offset) {
+        super(size, offset);
+		this.data = new byte[size];
+	}
+
+	@Override
+	public byte readByte(final int address) throws IllegalAccessException {
+		verifyAddress(address);
+		return data[address - getOffset()];
+	}
+
+	@Override
+	public void writeByte(final byte value, final int address) throws IllegalAccessException {
+		verifyAddress(address);
+		data[address - getOffset()] = value;
+	}
+}
+```
+
+### Strategy based implementation
