@@ -61,7 +61,50 @@ a printed sheet, or a browser tab, it is your call.
 
 ### Memory banking
 
+On some _memory map_ items, you can notice that some target are labelled with "bank" following by an
+numeric identifier : this refers to another concept that is _memory banking_.
+
+TODO : Switchable memory bank.
+
 ## Design
+
+Alright, now we are a little bit more confortable in how memory works, we can start doing some system
+design for it. Since with are using **Java** language, we will think in an oriented object manner,
+which is good as we can see a gameboy as a composition of several object, and here is what we need to
+represents our overall memory :
+
+- An **AddressBus**
+- Various memory banks
+
+But before diving into it, we will define behavior we need from our memory :
+
+- Read a byte at a given address.
+- Write a byte at a given address.
+
+That is quite straightforward, we can totally write an interface for it :
+
+```java
+public interface IMemoryStream {
+
+    byte readByte(int address) throws IllegalAccessException;
+
+    void writeByte(byte value, int address) throws IllegalAccessException;
+
+}
+```
+
+Despite how simple the interface is, we already face lot of issues here. First of all the storage aspect,
+each memory cell is represented by a **byte** value, which is 8-bit long in _Java_. Since an gameboy address
+reach a 8-bit block of data this is perfect, no memory waste, but all primitive types in _Java_ are signed.
+We should then keep this fact in mind when we will implements artihmetic operations later. The second main
+issues is the address storage type : we went for a **int** here which is 32-bit long. This means that we will
+use twice the amount of memory required to store an address since address are 16-bit long for the gameboy.
+Why not going for the **short** type which is *16-bit* long ? Well as for the storage aspect, **short**
+value are signed, which implies that values can go between -32768 and 32767 or we want an [0, 65536]
+address space. In order to ensure a given address is valid regarding of the address space, we then use
+an signed **int** which can cover the required range. Another option is to effectively use a **short**
+and build the real address on the fly by computing the unsigned value from bits, but since we aims to use
+addresses for memory indexing in a time efficient datastructure, this choice wasn't retained.
 
 ## Testing
 
