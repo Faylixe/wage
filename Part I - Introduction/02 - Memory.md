@@ -408,13 +408,13 @@ public static final class Builder {
 
     private Builder(final int size, final int offset) {
         this.size = size;
-		this.offset = offset;
+        this.offset = offset;
         this.banks = new ArrayList<IMemoryBank>();
 	}
 
     public Builder addMemoryBank(final IMemoryBank bank) {
         if (bank == null) {
-			throw new IllegalArgumentException("Null bank");
+            throw new IllegalArgumentException("Null bank");
 		}
 		if (bank.getSize() != size) {
 			throw new IllegalArgumentException("Size not matching");
