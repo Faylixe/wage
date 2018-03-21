@@ -118,15 +118,15 @@ public interface IMemoryBank extends IMemoryStream {
 
     int getSize();
 
-	int getOffset();
+    int getOffset();
 
 }
 ```
 
 The idea here is quite simple, a memory bank is defined by a _size_ (expressed in number of byte), and an
 _offset_ which correspond to the starting address this bank is reachable from. The address covered by such
-object will be then _[size, size + offset]_
-
+object will be then _[size, size + offset]_. Finally our address bus will be then a simple class that implements
+the **IMemoryStream** interface, and is connected to several **IMemoryBank** instance.
 
 ## Testing
 
