@@ -39,6 +39,8 @@ to a particular block of memory. Following table describes the _memory map_ asso
 gameboy address bus, but keep in mind that you can easily have a more detailled memory map with slot
 description and/or map variation depending on console model.
 
+\newpage
+
 | Address range | Target                    |
 | ------------- | ------------------------- |
 | $0000 - $3FFF | ROM bank 00               |
