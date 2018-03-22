@@ -1,6 +1,17 @@
 # Chapter 0 : Introduction
 
-TODO : Introduce the project itself.
+As a software engineer, it is hard to keep up with all existing field since technology grows fast, faster
+than you learn. Back at the time when i was a student, i would never imagine having free SSL certificate.
+Neural network in machine learning wasn't the reference in research as well as in the industry. Machine
+learning wasn't either. Developping short piece of software and plug it to make a complex microservice
+oriented architecture, using container, the cloud. That was only 5 years ago.
+
+You get specialized in some field(s), draw your career path, and as long as you progress through it, some
+concepts get lost in road. Low level programming is one of them, and when you hear about programming a
+fancy C/C++ emulator, this sounds mystical to you. Well that was the case for me. But what is great
+about mystical stuff, is that working on it is really, really fun. It turns out that you probably already
+have all the required knowledge to understand how an emulator works, the only thing is that you never
+used that knowledge in a concrete project before.
 
 ## Let's start !
 
