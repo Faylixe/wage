@@ -59,7 +59,7 @@ skill in the language you will choose. So weigh pros and cons about improving a 
 versus time it will take you to do the job, and motivation upkeep.
 
 This list is non-exhaustive as other items could be considered, such as the available tooling or existing
-implementation that can be used as reference. Final choice was arrested with **Java** (version 8).
+implementation that can be used as reference. Final choice was arrested with *Java* (version 8).
 
 ### Tooling
 
