@@ -9,7 +9,7 @@ jobs:
           name: Compile chapters
           command: |
             mkdir .chapters
-            find . -type f -name "*.md" -exec "cp {} .chapters/"
+            find . -type f -name "*.md" -exec cp {} .chapters/ \;
       - run:
           name: Merge chapters
           command: cat `ls -Q .chapters | sort` > .merged.md
