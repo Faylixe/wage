@@ -8,7 +8,8 @@ jobs:
       - run:
           name: Compile chapters
           command: |
-            ls -QR | grep .md | sort | while read chapter
-            do
-              cat $chapter >> .merged
-            done
+            mkdir .chapters
+            find . -type f -name "*.md" -exec cp {} .chapters/
+      - run:
+          name: Merge chapters
+          command: cat `ls -Q .chapters | sort` > .merged.md
