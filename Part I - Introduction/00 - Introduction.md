@@ -63,9 +63,13 @@ implementation that can be used as reference. Final choice was arrested with **J
 
 ### Tooling
 
-#### Unit testing
+#### Testing
 
-TODO : JUnit5 introduction.
+As we are not only exploring low level concept but also software engineering good practices, we will write
+and use unit testing during developpment. More than only by a good practice, it will be a perfect backup
+for you since an emulator is a complex system made of lot of part that you don't want to debug at the end.
+
+For writing and running unit tests as well as integration tests, we will use *JUnit5*.
 
 #### Continuous integration
 
