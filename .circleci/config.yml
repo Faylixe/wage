@@ -13,7 +13,7 @@ jobs:
             rm /tmp/chapters/README.md
       - run:
           name: Merge chapters
-          command: find /tmp/chapters -type f -exec cat {} >> .merged.md; echo "\n" >> .merged.md \;
+          command: find /tmp/chapters -type f -exec cat {} > .merged.md \;
       - run:
           name: Build PDF
           command: pandoc .merged.md -s -o manuscrits.pdf
