@@ -31,7 +31,7 @@ many skills.
 
 This books is a perfect match for intermediate software engineer whom want to assess themselves, as well
 as improving their existing skills. We assume here that you are familiar with at least one programming
-language, and not familliar with low level programming (but it won't be a problem if you are). Since
+language, and not familliar with low level programming (but it won't be a problem if you are). And since
 *Java* programming language is used here, it would be better if you have oriented object knowledge.
 
 ## Let's start !
