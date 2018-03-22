@@ -21,9 +21,15 @@ first time as said earlier is really fun. But most of all it will help you to gr
 in how a computer works (or at least it will help you remember how it does). Plus, emulation requires
 good understanding of lot of fundamental concept such as algorithmic and datastructure, time and space
 complexity, low level programming, system design, and more. Since emulation field requires performance
-and well written code to keep up, it will sharp you software engineering skills.
+and well written code to keep up, it will sharp your software engineering skills.
+
+Another good thing is the choosen emulated platform : the gameboy. As we will see in the next chapter,
+this target is at the same time small enough to suceed in achieving it, and big enough to walk through
+many skills.
 
 ## Let's start !
+
+But before starting the job, we need to define which tools we will use to realize it.
 
 ### Programming language
 
