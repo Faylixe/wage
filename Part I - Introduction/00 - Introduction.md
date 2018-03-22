@@ -27,6 +27,13 @@ Another good thing is the choosen emulated platform : the gameboy. As we will se
 this target is at the same time small enough to suceed in achieving it, and big enough to walk through
 many skills.
 
+## Audience
+
+This books is a perfect match for intermediate software engineer whom want to assess themselves, as well
+as improving their existing skills. We assume here that you are familiar with at least one programming
+language, and not familliar with low level programming (but it won't be a problem if you are). Since
+*Java* programming language is used here, it would be better if you have oriented object knowledge.
+
 ## Let's start !
 
 But before starting the job, we need to define which tools we will use to realize it.
