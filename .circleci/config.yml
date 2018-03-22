@@ -6,8 +6,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: Compile chapter list
+          command: ls -R | grep .md | sort > .files
       - run:
-          name: Print the Current Time
-          command: date
+          name: Merge chapter
+          command: |
+            cat .files | while read chapter
+            do
+              cat $chapter >> .merged
+            done
