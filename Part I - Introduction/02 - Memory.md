@@ -25,8 +25,8 @@ memory, it puts the target memory address on the address bus and the target data
 Nothing more, nothing less.
 
 The address space is the range of addresses that can be reached through your address bus. In case of
-the gameboy, the address bus is 16-bit wide. Thus your memory address varies between $0$ and $2^16 - 1$, 
-so $65536$ addresses available.
+the gameboy, the address bus is 16-bit wide. Thus your memory address varies between 0 and 2<sup>16</sup> - 1, 
+so 65536 addresses available.
 
 ### Memory map
 
