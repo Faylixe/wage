@@ -6,12 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Compile chapter list
-          command: ls -R | grep .md | sort > .files
-      - run:
-          name: Merge chapter
+          name: Compile chapters
           command: |
-            cat .files | while read chapter
+            ls -R | grep .md | sort | while read chapter
             do
               cat $chapter >> .merged
             done
