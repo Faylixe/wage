@@ -8,7 +8,7 @@ jobs:
       - run:
           name: Compile chapters
           command: |
-            ls -R | grep .md | sort | while read chapter
+            ls -QR | grep .md | sort | while read chapter
             do
               cat $chapter >> .merged
             done
