@@ -13,6 +13,16 @@ about mystical stuff, is that working on it is really, really fun. It turns out 
 have all the required knowledge to understand how an emulator works, the only thing is that you never
 used that knowledge in a concrete project before.
 
+## Yet another gameboy emulator
+
+The idea here is to develop your own gameboy emulator, which is a great project to improve your
+programming skills. First of all, the background is quite enjoyable, programming an emulator for the
+first time as said earlier is really fun. But most of all it will help you to grow your understanding
+in how a computer works (or at least it will help you remember how it does). Plus, emulation requires
+good understanding of lot of fundamental concept such as algorithmic and datastructure, time and space
+complexity, low level programming, system design, and more. Since emulation field requires performance
+and well written code to keep up, it will sharp you software engineering skills.
+
 ## Let's start !
 
 ### Programming language
