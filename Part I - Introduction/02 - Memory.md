@@ -56,6 +56,8 @@ description and/or map variation depending on console model.
 | $FF80 - $FFFE | HRAM                      |
 | $FFFF - $FFFF | Interrupt enable register |
 
+Table: Gameboy memory map
+
 Please note the used address notation, as it will be the same throughout all the book and most likely on
 documentation you will find over the web. An address is prefixed by the dollar sign, and consists
 of 4 digits, using hexadecimal notation, which represents the effective 16-bit address. Remember, 16-bit,
