@@ -8,8 +8,8 @@ jobs:
       - run:
           name: Compile chapters
           command: |
-            mkdir .chapters
-            find . -type f -name "*.md" -exec cp {} .chapters/ \;
+            mkdir -p /tmp/chapters
+            find . -type f -name "*.md" -exec cp {} /tmp/chapters/ \;
       - run:
           name: Merge chapters
-          command: cat `ls -Q .chapters | sort` > .merged.md
+          command: cat `ls -Q /tmp/chapters | sort` > .merged.md
