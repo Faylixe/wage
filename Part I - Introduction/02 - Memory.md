@@ -120,12 +120,18 @@ we will define a generic high level **IMemoryBank** interface, which extends the
 ```java
 public interface IMemoryBank extends IMemoryStream {
 
-    int getSize();
+	int getSize();
 
-    int getOffset();
+	int getOffset();
+
+	default boolean isAddressCovered(int address) {
+		return (address < getOffset() || address >= (getOffset() + getSize()));
+	}
 
 }
 ```
+
+TODO : Update with isAddressCovered method.
 
 The idea here is quite simple, a memory bank is defined by a _size_ (expressed in number of byte), and an
 _offset_ which correspond to the starting address this bank is reachable from. The address covered by such
@@ -300,7 +306,7 @@ public abstract class AbstractMemoryBank implements IMemoryBank {
 	}
 
 	protected final void verifyAddress(final int address) throws IllegalAccessException {
-		if (address < getOffset() || address >= (getOffset() + getSize())) {
+		if (isAddressCovered(address)) {
 			throw new IllegalAccessException();
 		}
 	}
@@ -311,12 +317,16 @@ public abstract class AbstractMemoryBank implements IMemoryBank {
 }
 ```
 
+TODO : Update verifyAddress spec.
+
 Nothing magic here, the only noticeable point is the **protected** method **verifyAddress(int)**
 which ensures that a given address is covered by this bank. This will avoid code duplication
 over addressing control since we will perform such operation all the time we write an access
 method.
 
 ### Concrete implementation
+
+TODO : Refactor description according to exercice.
 
 A concrete implementation relies on a specific datastructure, for storing and indexing associated
 memory block. The most naïve one, and probably the most efficient, is to use a single **byte** array.
@@ -348,7 +358,7 @@ public final class ArrayMemoryBank extends AbstractMemoryBank {
 	}
 }
 ```
-
+TODO : Testing part.
 TODO : Exercice, write Singleton memory bank, and BitSet memory bank.
 
 ### Strategy based implementation
