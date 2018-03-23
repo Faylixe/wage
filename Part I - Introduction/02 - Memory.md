@@ -328,192 +328,41 @@ on the project repository.
 ```java
 public final class ArrayMemoryBank extends AbstractMemoryBank {
 
-    private final byte[] data;
+	private final byte[] data;
 
-    public ArrayMemoryBank(final int size, final int offset) {
-        super(size, offset);
+	public ArrayMemoryBank(int size, int offset) {
+		super(size, offset);
 		this.data = new byte[size];
 	}
 
 	@Override
-	public byte readByte(final int address) throws IllegalAccessException {
+	public byte readByte(int address) throws IllegalAccessException {
 		verifyAddress(address);
 		return data[address - getOffset()];
 	}
 
 	@Override
-	public void writeByte(final byte value, final int address) throws IllegalAccessException {
+	public void writeByte(byte value, int address) throws IllegalAccessException {
 		verifyAddress(address);
 		data[address - getOffset()] = value;
 	}
 }
 ```
 
+TODO : Exercice, write Singleton memory bank, and BitSet memory bank.
+
 ### Strategy based implementation
 
 #### ROM (Read Only Memory)
 
-```java
-public final class ReadOnlyMemoryBank implements IMemoryBank {
-
-	private final IMemoryBank delegate;
-
-	public ReadOnlyMemoryBank(final IMemoryBank delegate) {
-		this.delegate = delegate;
-	}
-
-	@Override
-	public int getSize() {
-		return delegate.getSize();
-	}
-
-	@Override
-	public int getOffset() {
-		return delegate.getOffset();
-	}
-
-	@Override
-	public void writeByte(final byte value, final int address) throws IllegalAccessException {
-		throw new IllegalAccessException("Attemping to write into read only memory block.");
-	}
-
-	@Override
-	public byte readByte(final int address) throws IllegalAccessException {
-		return delegate.readByte(address);
-	}
-
-}
-```
+TODO : note on decorator pattern.
 
 #### Switchable bank
 
-```java
+TODO : note on switchable.
 
-public final class SwitchableMemoryBank extends AbstractMemoryBank {
+### AddressBus
 
-	private final IMemoryStream [] banks;
-	private final AtomicInteger current;
+TODO : address bus class design and impl.
 
-	private SwitchableMemoryBank(
-			final IMemoryBank [] banks,
-			final int size,
-			final int offset) {
-		super(size, offset);
-		this.banks = banks;
-		this.current = new AtomicInteger();
-	}
-
-	public int getBankSize() {
-		return banks.length;
-	}
-
-	public void switchBank(final int target) {
-		if (target < 0 || target >= banks.length) {
-			throw new IllegalArgumentException();
-		}
-		current.set(target);
-	}
-
-	@Override
-	public byte readByte(final int address) throws IllegalAccessException {
-		return banks[current.get()].readByte(address);
-	}
-
-	@Override
-	public void writeByte(final byte value, final int address) throws IllegalAccessException {
-		banks[current.get()].writeByte(value, address);
-	}
-
-}
-```
-
-```java
-public static final class Builder {
-
-    private final int size;
-    private final int offset;
-    private final List<IMemoryBank> banks;
-
-    private Builder(final int size, final int offset) {
-        this.size = size;
-        this.offset = offset;
-        this.banks = new ArrayList<IMemoryBank>();
-	}
-
-    public Builder addMemoryBank(final IMemoryBank bank) {
-        if (bank == null) {
-            throw new IllegalArgumentException("Null bank");
-        }
-        if (bank.getSize() != size) {
-            throw new IllegalArgumentException("Size not matching");
-        }
-        if (bank.getOffset() != offset) {
-            throw new IllegalArgumentException("Offset not matching");
-        }
-        banks.add(bank);
-        return this;
-	}
-
-	public SwitchableMemoryBank build() {
-		if (banks.isEmpty()) {
-			throw new IllegalStateException("No bank available");
-		}
-		final IMemoryBank [] switchable = new IMemoryBank[banks.size()];
-		banks.toArray(switchable);
-		return new SwitchableMemoryBank(switchable, size, offset);
-	}
-
-}
-```
-
-### Address bus
-
-```java
-public final class AddressBus implements IMemoryStream {
-
-	private final NavigableMap<Integer, IMemoryBank> memory;
-
-	public AddressBus() {
-		this.memory = new TreeMap<>();
-	}
-
-	public void connect(final IMemoryBank memoryBank) {
-		if (memoryBank == null) {
-			throw new IllegalArgumentException();
-		}
-		// final int offset = memoryBlock.getOffset();
-		// TODO : Check for address conflict.
-		memory.put(memoryBank.getOffset(), memoryBank);
-	}
-
-	public void disconnect(final IMemoryBank memoryBank) {
-		if (memoryBank == null) {
-			throw new IllegalArgumentException();
-		}
-		if (memory.remove(memoryBank.getOffset()) == null) {
-			throw new IllegalArgumentException();
-		}
-	}
-
-	private IMemoryStream getMemoryStream(final int address) throws IllegalAccessException {
-		final Integer nearAddressableOffset = memory.floorKey(address);
-		if (nearAddressableOffset == null) {
-			throw new IllegalAccessException("Unreachable memory address");
-		}
-		// TODO : Check for more coverage ?
-		return memory.get(nearAddressableOffset);
-	}
-
-	@Override
-	public byte readByte(final int address) throws IllegalAccessException {
-		return getMemoryStream(address).readByte(address);
-	}
-
-	@Override
-	public void writeByte(final byte value, final int address) throws IllegalAccessException {
-		getMemoryStream(address).writeByte(value, address);
-	}
-
-}
-```
 \newpage
