@@ -199,9 +199,8 @@ default void testAllowedReading() {
     });
 }
 ```
-
-| ----------| --- | --- | --- | --- | --- | --- | --- | --- |
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
+| ----------| --- | --- | --- | --- | --- | --- | --- | --- |
 | Value     | 1   | 0   | 1   | 0   | 1   | 0   | 1   | 0   |
 
 TODO : Note on 85 and 15 value computation.
