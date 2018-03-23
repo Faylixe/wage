@@ -199,19 +199,30 @@ default void testAllowedReading() {
     });
 }
 ```
+
+TODO : Note on 85 and 15 value computation.
+
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | ----------| --- | --- | --- | --- | --- | --- | --- | --- |
 | Value     | 1   | 0   | 1   | 0   | 1   | 0   | 1   | 0   |
 
-> 2<sup>0</sup> + 2<sup>2</sup> + 2<sup>3</sup> + 2<sup>4</sup> = 85
+> 2<sup>0</sup> + 2<sup>2</sup> + 2<sup>4</sup> + 2<sup>6</sup> = 85
 
-TODO : Note on 85 and 15 value computation.
 
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | ----------| --- | --- | --- | --- | --- | --- | --- | --- |
 | Value     | 1   | 1   | 1   | 1   | 0   | 0   | 0   | 0   |
 
 > 2<sup>0</sup> + 2<sup>1</sup> + 2<sup>2</sup> + 2<sup>3</sup> = 15
+
+TODO : Note on signed value (-43 here)
+
+
+| Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
+| ----------| --- | --- | --- | --- | --- | --- | --- | --- |
+| Value     | 1   | 0   | 1   | 0   | 1   | 0   | 1   | 1   |
+
+> 2<sup>0</sup> + 2<sup>2</sup> + 2<sup>4</sup> + 2<sup>6</sup> + 2<sup>7</sup>= 213
 
 That's it ! Such test interface can now be reused for any test that covers a class which implements the **IMemoryStream**
 interface. This testing strategy will be used throughout all this project. We can now move to a deeper level, which is the
