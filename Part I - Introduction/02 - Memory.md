@@ -413,16 +413,7 @@ public final class ReadOnlyMemoryBank implements IMemoryBank {
 	}
 
 	@Override
-	public byte[] readBytes(int address, int length) throws IllegalAccessException {
-		return delegate.readBytes(address, length);
-	}
-	@Override
 	public void writeByte(byte value, int address) throws IllegalAccessException {
-		throw new IllegalAccessException("Attemping to write into read only memory block.");
-	}
-
-	@Override
-	public void writeBytes(byte[] values, int address) throws IllegalAccessException {
 		throw new IllegalAccessException("Attemping to write into read only memory block.");
 	}
 
@@ -430,7 +421,9 @@ public final class ReadOnlyMemoryBank implements IMemoryBank {
 ```
 
 TODO : Class observation
+
 TODO : Mock section
+
 TODO : Test section
 
 #### Switchable bank
