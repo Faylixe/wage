@@ -131,12 +131,12 @@ public interface IMemoryBank extends IMemoryStream {
 }
 ```
 
-TODO : Update with isAddressCovered method.
-
 The idea here is quite simple, a memory bank is defined by a _size_ (expressed in number of byte), and an
 _offset_ which correspond to the starting address this bank is reachable from. The address covered by such
 object will then be _[offset, offset + size]_. Finally our address bus will then be a simple class that implements
-the **IMemoryStream** interface and is connected to several **IMemoryBank** instances.
+the **IMemoryStream** interface and is connected to several **IMemoryBank** instances. In order to control illegal
+addressing we also provide a default method **isAddressCovered(int)** which indicates with a **boolean** if a given
+address is covered by this bank or not.
 
 ## Testing
 
@@ -178,10 +178,10 @@ public interface IMemoryStreamTest {
 }
 ```
 
-We define some scenario related constants, as well as a factory method that should be use to retrieve a testing instance.
-Finally a shortcut method for performing a test defined as an **IMemoryStream** consumer. Now we can write two tests that
-will respectively ensure that uncovered address access will throw an **IllegalAccessException** and that the value located at _$4_
-and _$5_ are the one expected.
+We define some scenario related constants, as well as a factory method that should be use to retrieve a
+testing instance. Finally a shortcut method for performing a test defined as an **IMemoryStream** consumer.
+Now we can write two tests that will respectively ensure that uncovered address access will throw an
+**IllegalAccessException** and that the value located at _$4_ and _$5_ are the one expected.
 
 ```java
 @Test
@@ -206,7 +206,8 @@ default void testAllowedReading() {
 }
 ```
 
-TODO : Note on 85 and 15 value computation.
+Here we compare actual decimal representation of byte layouts we mention earlier. As a quick reminder on how
+switching from binary representation to decimal one, here is the formula applied on both numbers :
 
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | ----------| --- | --- | --- | --- | --- | --- | --- | --- |
@@ -221,8 +222,12 @@ TODO : Note on 85 and 15 value computation.
 
 > 2<sup>0</sup> + 2<sup>1</sup> + 2<sup>2</sup> + 2<sup>3</sup> = 15
 
-TODO : Note on signed value (-43 here)
+As you can see, we only compute a sum of 2<sup>n</sup> for each _n_ where corresponding bit positon is _settled_
+(where bit value is 1). The indexing order can vary depending on the target platform representation, this is
+the _bit endianness_. For gameboy as for many systems, the representation used is _little endian_ meaning that
+bit are indexed from _0_ to _n_ starting from left. Reverse order (starting from right) is the opposite _big endian_.
 
+TODO : Note on signed value (-43 here)
 
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | ----------| --- | --- | --- | --- | --- | --- | --- | --- |
