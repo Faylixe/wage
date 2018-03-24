@@ -322,12 +322,10 @@ public abstract class AbstractMemoryBank implements IMemoryBank {
 }
 ```
 
-TODO : Update verifyAddress spec.
-
-Nothing magic here, the only noticeable point is the **protected** method **verifyAddress(int)**
-which ensures that a given address is covered by this bank. This will avoid code duplication
-over addressing control since we will perform such operation all the time we write an access
-method.
+Nothing magic here, except the **protected** method **verifyAddress(int)** which is a sugar
+method that throws an **IllegalAccessException** when a given address is not covered. This
+will avoid code duplication over addressing control since we will perform such operation
+all the time we write an access method.
 
 ### Concrete implementation
 
