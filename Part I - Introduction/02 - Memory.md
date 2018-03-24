@@ -206,7 +206,7 @@ default void testAllowedReading() {
 }
 ```
 
-Here we compare actual decimal representation of byte layouts we mention earlier. As a quick reminder on how
+Here we compare actual decimal representation of byte layouts we mentionned earlier. As a quick reminder on how
 switching from binary representation to decimal one, here is the formula applied on both numbers :
 
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
@@ -329,14 +329,12 @@ all the time we write an access method.
 
 ### Concrete implementation
 
-TODO : Refactor description according to exercice.
-
-A concrete implementation relies on a specific datastructure, for storing and indexing associated
-memory block. The most naïve one, and probably the most efficient, is to use a single **byte** array.
-Some other based on **java.lang.BitSet** for example could be used, efficienty can be benchmarked
-so we can choose the best fit. We can also have _read-oriented_ or _write-oriented_ depending on
-assumed memory usage. We will only go for the array based here, but more implementations can be found
-on the project repository.
+The idea behind a concrete implementation is that it relies on a specific datastructure,
+for storing and indexing associated memory block. The most naïve one, and probably the
+most efficient, is to use a single **byte** array. We can define as much implementation
+as we need, some of them being specific to a particular purpose like favor time complexity
+for reading operation, or even minimize the space complexity. The following example implements
+the **AbstractMemoryBank** class using an single array as backing structure :
 
 ```java
 public final class ArrayMemoryBank extends AbstractMemoryBank {
@@ -361,8 +359,15 @@ public final class ArrayMemoryBank extends AbstractMemoryBank {
 	}
 }
 ```
+
+We will only go for the array based here, but as an exercice you can try to implement memory bank
+based on **BitSet** or a particular memory bank that only holds a single value for a unique address.
+You can then compare them to following implementations from _YAGE_ repository :
+
+- _fr.faylixe.yage.memory.bank.BitSetMemoryBank_
+- _fr.faylixe.yage.memory.bank.SingletonMemoryBank_
+
 TODO : Testing part.
-TODO : Exercice, write Singleton memory bank, and BitSet memory bank.
 
 ### Strategy based implementation
 
