@@ -373,15 +373,61 @@ TODO : Testing part.
 
 A strategy based implementation relies on a concrete implementation developped before, as it is mostly
 acting as bank proxy with some additional control over expected behavior. Analyzing target system
-specification and associated memory map :
+specification and associated memory map give us three obvious ones :
 
 - A read only memory bank, which will be used as ROM space.
 - A switchable memory bank, as some address space can perform banking switch.
 - An echo view of a memory bank, for the work ram mirror part of the address space.
 
+For all those implementation, we will mainly use the _decorator pattern_ which consists
+in wrapping a target objet in a class that implements the same interface(s) of the delegate,
+and redirects method calls to the delegate object. As we will see next, the read only case
+illustrates this principle perfectly.
+
 #### ROM (Read Only Memory)
 
-TODO : note on decorator pattern.
+The read only memory as it name suggests, is a memory bank that only support read operation.
+In order to achieve this, we will only delegate read operation to a concrete **IMemoryBank**,
+and automatically throws an **IllegalAccessException** for each write methods :
+	
+```java
+public final class ReadOnlyMemoryBank implements IMemoryBank {
+
+	private final IMemoryBank delegate;
+
+	public ReadOnlyMemoryBank(IMemoryBank delegate) {
+		this.delegate = delegate;
+	}
+
+	@Override public int getSize() { return delegate.getSize(); }
+	@Override public int getOffset() { return delegate.getOffset(); }
+
+	@Override
+	public boolean isAddressCovered(final int address) {
+		return delegate.isAddressCovered(address);
+	}
+
+	@Override 
+	public byte readByte(int address) throws IllegalAccessException {
+		return delegate.readByte(address);
+	}
+
+	@Override
+	public byte[] readBytes(int address, int length) throws IllegalAccessException {
+		return delegate.readBytes(address, length);
+	}
+	@Override
+	public void writeByte(byte value, int address) throws IllegalAccessException {
+		throw new IllegalAccessException("Attemping to write into read only memory block.");
+	}
+
+	@Override
+	public void writeBytes(byte[] values, int address) throws IllegalAccessException {
+		throw new IllegalAccessException("Attemping to write into read only memory block.");
+	}
+
+}
+```
 
 #### Switchable bank
 
