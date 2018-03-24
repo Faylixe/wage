@@ -1,15 +1,15 @@
 # Chapter 0 : Introduction
 
-As a software engineer, it is hard to keep up with all existing field since technology grows fast, faster
-than you learn. Back at the time when i was a student, i would never imagine having free SSL certificate.
-Neural network in machine learning wasn't the reference in research as well as in the industry. In fact
+As a software engineer, it is hard to keep up with all existing field since technology grows faster
+than you can learn. Back in the day, when I was a student, I would never imagine having a free SSL certificate.
+Neural networks in machine learning wasn't the reference in research as well as in the industry. In fact
 machine learning wasn't either. Developping short pieces of software and plug them together in order to
 make a complex microservice oriented architecture, using container, the cloud. That was only 5 years ago.
 
 You get specialized in some field(s), draw your career path, and as long as you progress through it, some
-concepts get lost in road. Low level programming is one of them, and when you hear about programming a
+concepts get lost on the way. Low level programming is one of them and when you hear about programming a
 fancy gaming console emulator, this sounds mystical to you. Well that was the case for me. But what is great
-about mystical stuff, is that working on it is really, really fun. It turns out that you probably already
+about mystical things, is that working on it is really, really fun. It turns out that you probably already
 have all the required knowledge to understand how an emulator works, the only thing is that you never
 used that knowledge in a concrete project before.
 
@@ -17,26 +17,27 @@ used that knowledge in a concrete project before.
 
 The idea here is to develop your own gameboy emulator, which is a great project to improve your
 programming skills. First of all, the background is quite enjoyable, programming an emulator for the
-first time as said earlier is really fun. But most of all it will help you to grow your understanding
+first time as said earlier is really fun. But most of all, it will help you grow your understanding
 in how a computer works (or at least it will help you remember how it does). Plus, emulation requires
-good understanding of lot of fundamental concept such as algorithmic and datastructure, time and space
+good understanding of lot of fundamental concept such as algorithms and datastructure, time and space
 complexity, low level programming, system design, and more. Since emulation field requires performance
-and well written code to keep up, it will sharp your software engineering skills.
+and well written code to keep up, it will sharpen your software engineering skills.
 
 Another good thing is the choosen emulated platform : the gameboy. As we will see in the next chapter,
-this target is at the same time small enough to suceed in achieving it, and big enough to walk through
+this target is at the same time small enough to succeed in achieving it, and big enough to walk through
 many skills.
 
 ## Audience
 
 This books is a perfect match for intermediate software engineer whom want to assess themselves, as well
 as improving their existing skills. We assume here that you are familiar with at least one programming
-language, and not familliar with low level programming (but it won't be a problem if you are). And since
-*Java* programming language is used here, it would be better if you have oriented object knowledge.
+language, and not familliar with low level programming (but it won't be a problem if you are). And since the
+*Java* programming language is used here, it would be better if you have knowledge of object oriented programming (OOP).
+Why I chose *Java* as the programming language will become clear in the next sections.
 
 ## Let's start !
 
-But before starting the job, we need to define which tools we will use to realize it.
+But before starting the job, we need to define which tools we will use.
 
 ### Programming language
 
@@ -44,19 +45,19 @@ Choosing a programming language for developping an emulator is not harmless. Ind
 involved in this choice :
 
 - _Performance_, that sounds obvious, but emulating a game console requires high level performances. Of
-course, the gameboy hardware specifications aren't that big, versus modern computer resources. We can
-totally assume that we can exploit such hardware resources gap, but it won't work for other target so
+course, the gameboy hardware specifications aren't that big versus modern computer resources. We can
+totally assume that we can exploit such hardware resources gap, but it won't work for other targets so
 we won't.
-- _Data typing_, since you will structure data as the original hardware will (or at least try to do it),
-you need a fine control over primitive types used. Bit endianess, signed, unsigned, memory footprint,
-all those aspects will impact your code.
+- _Data typing_, since you will structure data as the original hardware (or at least try to do it),
+you need a fine control over primitive types used : bit endianness, signed and unsigned, memory footprint, ...
+All those aspects will impact your code.
 - _Confort_, this point comes last but is maybe the most important one. As you are supposed to not be
-familiar with low level programming, you don't want to focus on language aspect, but rather on low
-level concept. Picking a language in which you are really confortable, will make you develop
+familiar with low level programming, you don't want to focus on language aspects, but rather on low
+level concept. Picking a language in which you are really confortable will make you develop
 quicker, and doesn't get you discouraged when implementing any features. On the other hand, programming
 an emulator turns out to be an outstanding experience that will more than everything improve your coding
 skill in the language you will choose. So weigh pros and cons about improving a target language experience
-versus time it will take you to do the job, and motivation upkeep.
+versus the time it will take you to do the job, and motivation upkeep.
 
 This list is non-exhaustive as other items could be considered, such as the available tooling or existing
 implementation that can be used as reference. Final choice was arrested with *Java* (version 8).
@@ -66,11 +67,11 @@ implementation that can be used as reference. Final choice was arrested with *Ja
 #### Testing
 
 As we are not only exploring low level concept but also software engineering good practices, we will write
-and use unit testing during developpment. More than only be a good practice, it will be a perfect backup
-for you since an emulator is a complex system made of lot of part that you don't want to debug at the end.
-For writing and running unit tests as well as integration tests, we will use *JUnit5*, which brings lot
-of new exciting features. Thus testing related part of this book will assume that you know how to write
-unit test using standard *JUnit4* at least.
+and use unit testing during development. More than only being good practice, it will be a perfect backup
+for you since an emulator is a complex system made of lots of parts that you don't want to debug at the end.
+For writing and running unit tests as well as integration tests, we will use *JUnit5* which brings a lot
+of new exciting features. Thus testing related part of this book will assume that you at least know how to write
+unit test using standard *JUnit4*.
 
 #### Continuous integration
 
