@@ -334,7 +334,7 @@ for storing and indexing associated memory block. The most naïve one, and proba
 most efficient, is to use a single **byte** array. We can define as much implementation
 as we need, some of them being specific to a particular purpose like favor time complexity
 for reading operation, or even minimize the space complexity. The following example implements
-the **AbstractMemoryBank** class using an single array as backing structure :
+the **IMemoryBank** contract using an single array as backing structure :
 
 ```java
 public final class ArrayMemoryBank extends AbstractMemoryBank {
@@ -370,6 +370,14 @@ You can then compare them to following implementations from _YAGE_ repository :
 TODO : Testing part.
 
 ### Strategy based implementation
+
+A strategy based implementation relies on a concrete implementation developped before, as it is mostly
+acting as bank proxy with some additional control over expected behavior. Analyzing target system
+specification and associated memory map :
+
+- A read only memory bank, which will be used as ROM space.
+- A switchable memory bank, as some address space can perform banking switch.
+- An echo view of a memory bank, for the work ram mirror part of the address space.
 
 #### ROM (Read Only Memory)
 
