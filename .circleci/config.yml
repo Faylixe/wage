@@ -6,6 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Download extra dependencies
+          command: apt-get install -y wget
+      - run:
           name: Retrieve template
           command: wget -O ~/.pandoc/templates/wage.latex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
       - run:
