@@ -227,13 +227,31 @@ As you can see, we only compute a sum of 2<sup>n</sup> for each _n_ where corres
 the _bit endianness_. For gameboy as for many systems, the representation used is _little endian_ meaning that
 bit are indexed from _0_ to _n_ starting from left. Reverse order (starting from right) is the opposite _big endian_.
 
-TODO : Note on signed value (-43 here)
+But here we are lucky as number fit the signed range of value a **byte** can offer. What happens for negative number ?
+Well the last bit (located at position 7) act as a sign flag so if such bit is settled, then the _two's complements_
+technique is applied. It consists in reverting each bit from index _0_ to _n_, and add 1 to the given result. Let walk
+through a concrete example with _0b10101011_ :
+
 
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | ----------| --- | --- | --- | --- | --- | --- | --- | --- |
 | Value     | 1   | 0   | 1   | 0   | 1   | 0   | 1   | 1   |
 
+If you don't care about the sign bit, well the corresponding value would be :
+
 > 2<sup>0</sup> + 2<sup>2</sup> + 2<sup>4</sup> + 2<sup>6</sup> + 2<sup>7</sup>= 213
+
+But since *Java* uses signed **byte**, what we do is reverting all bits :
+
+| Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
+| ----------| --- | --- | --- | --- | --- | --- | --- | --- |
+| Value     | 0   | 1   | 0   | 1   | 0   | 1   | 0   | 0   |
+
+Which gives us the following decimal value :
+
+> 2<sup>1</sup> + 2<sup>3</sup> + 2<sup>5</sup> = 42
+
+Thus you add 1 and set the sign as negative which gaves us _-43_.
 
 That's it ! Such test interface can now be reused for any test that covers a class which implements the **IMemoryStream**
 interface. This testing strategy will be used throughout all this project. We can now move to a deeper level, which is the
