@@ -390,13 +390,11 @@ with tests ! As we want tests to be reusable through distinct implementations we
 interface which handles writing related test :
 
 ```java
-public interface IMemoryBankWriteTest extends IMemoryBankTest {
-
-	IMemoryBank createTestMemoryBank(int size, int offset);
+public final class ArrayMemoryBankTest extends IMemoryBankTest {
 
 	@Override
-	default IMemoryBank getTestMemoryBank() {
-		final IMemoryBank bank = createTestMemoryBank(TEST_SIZE, TEST_OFFSET);
+	public IMemoryBank getTestMemoryBank() {
+		final IMemoryBank bank = new ArrayMemoryBank(TEST_SIZE, TEST_OFFSET);
 		try {
 			bank.writeByte((byte) 85, TEST_OFFSET);
 			bank.writeByte((byte) 15, TEST_OFFSET + 1);
@@ -406,45 +404,18 @@ public interface IMemoryBankWriteTest extends IMemoryBankTest {
 		}
 		return bank;
 	}
+}
+```
 
-	@Test
-	default void testAlllowedWriting() {
-		performStreamTest(stream -> {
-			try {
-				stream.writeByte((byte) 42, 6));
-			}
-			catch (final IllegalAccessException e) {
-				fail(e);
-			}
-		});
-	}
-	
-	@Test
-	default void testAlllowedWritings() {
-		performStreamTest(stream -> {
-			try {
-				stream.writeBytes(new byte[] { 42 }, 6));
-			}
-			catch (final IllegalAccessException e) {
-				fail(e);
-			}
-		});
-	}
+We can also ensure that writing to illegal address throws expected exception :
 
-	@Test
-	default void testUnalllowedWriting() {
-		performStreamTest(stream -> {
-			assertThrows(IllegalAccessException.class, () -> stream.writeByte((byte) 42, 69));
-		});
-	}
-
-	@Test
-	default void testUnalllowedWritings() {
-		performStreamTest(stream -> {
-			assertThrows(IllegalAccessException.class, () -> stream.writeBytes(new byte[] { 42 }, 0));
-			assertThrows(IllegalAccessException.class, () -> stream.writeBytes(new byte[] { 42, 58 }, 6));
-		});
-	}
+```java
+@Test
+public void testUnalllowedWriting() {
+	performStreamTest(stream -> {
+		assertThrows(IllegalAccessException.class, () -> stream.writeByte((byte) 42, 69));
+	});
+}
 ```
 
 ### Strategy based implementation
