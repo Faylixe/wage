@@ -385,7 +385,67 @@ You can then compare them to following implementations from _YAGE_ repository :
 - _fr.faylixe.yage.memory.bank.BitSetMemoryBank_
 - _fr.faylixe.yage.memory.bank.SingletonMemoryBank_
 
-TODO : Testing part.
+Before moving foward to strategy based implementation, don't forget that we need to validate our implementation
+with tests ! As we want tests to be reusable through distinct implementations we can have a specialized test
+interface which handles writing related test :
+
+```java
+public interface IMemoryBankWriteTest extends IMemoryBankTest {
+
+	IMemoryBank createTestMemoryBank(int size, int offset);
+
+	@Override
+	default IMemoryBank getTestMemoryBank() {
+		final IMemoryBank bank = createTestMemoryBank(TEST_SIZE, TEST_OFFSET);
+		try {
+			bank.writeByte((byte) 85, TEST_OFFSET);
+			bank.writeByte((byte) 15, TEST_OFFSET + 1);
+		}
+		catch (final IllegalAccessException e) {
+			fail(e);
+		}
+		return bank;
+	}
+
+	@Test
+	default void testAlllowedWriting() {
+		performStreamTest(stream -> {
+			try {
+				stream.writeByte((byte) 42, 6));
+			}
+			catch (final IllegalAccessException e) {
+				fail(e);
+			}
+		});
+	}
+	
+	@Test
+	default void testAlllowedWritings() {
+		performStreamTest(stream -> {
+			try {
+				stream.writeBytes(new byte[] { 42 }, 6));
+			}
+			catch (final IllegalAccessException e) {
+				fail(e);
+			}
+		});
+	}
+
+	@Test
+	default void testUnalllowedWriting() {
+		performStreamTest(stream -> {
+			assertThrows(IllegalAccessException.class, () -> stream.writeByte((byte) 42, 69));
+		});
+	}
+
+	@Test
+	default void testUnalllowedWritings() {
+		performStreamTest(stream -> {
+			assertThrows(IllegalAccessException.class, () -> stream.writeBytes(new byte[] { 42 }, 0));
+			assertThrows(IllegalAccessException.class, () -> stream.writeBytes(new byte[] { 42, 58 }, 6));
+		});
+	}
+```
 
 ### Strategy based implementation
 
