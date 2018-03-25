@@ -9,10 +9,10 @@ jobs:
           name: Retrieve template
           command: wget -O ~/.pandoc/templates/wage.latex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
       - run:
-        name: Merge chapters
-        command: find chapters -type f -name "*.md" -exec cat {} \; > wage.md
+          name: Merge chapters
+          command: find chapters -type f -name "*.md" -exec cat {} \; > wage.md
       - run:
-        name: Build PDF
-        command: pandoc wage.md -o wage.pdf --from markdown --template eisvogel --listings
+          name: Build PDF
+          command: pandoc wage.md -o wage.pdf --from markdown --template eisvogel --listings
       - store_artifacts:
           path: wage.pdf
