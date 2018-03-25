@@ -18,6 +18,6 @@ jobs:
           command: find chapters -type f -name "*.md" -exec cat {} \; > wage.md
       - run:
           name: Build PDF
-          command: pandoc wage.md -o wage.pdf --from markdown --template eisvogel --listings
+          command: pandoc wage.md -o wage.pdf --from markdown --template wage --listings
       - store_artifacts:
           path: wage.pdf
