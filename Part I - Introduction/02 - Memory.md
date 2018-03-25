@@ -386,8 +386,7 @@ You can then compare them to following implementations from _YAGE_ repository :
 - _fr.faylixe.yage.memory.bank.SingletonMemoryBank_
 
 Before moving foward to strategy based implementation, don't forget that we need to validate our implementation
-with tests ! As we want tests to be reusable through distinct implementations we can have a specialized test
-interface which handles writing related test :
+with tests ! Thanks to previously made test interfaces, we only need to implement the test instance factory method :
 
 ```java
 public final class ArrayMemoryBankTest extends IMemoryBankTest {
@@ -407,7 +406,7 @@ public final class ArrayMemoryBankTest extends IMemoryBankTest {
 }
 ```
 
-We can also ensure that writing to illegal address throws expected exception :
+We can also add an additional test that ensure writing to illegal address throws expected exception :
 
 ```java
 @Test
