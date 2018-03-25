@@ -10,7 +10,9 @@ jobs:
           command: apt-get install -y wget
       - run:
           name: Retrieve template
-          command: wget -O ~/.pandoc/templates/wage.latex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
+          command: |
+            mkdir -p ~/.pandoc/templates
+            wget -O ~/.pandoc/templates/wage.latex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
       - run:
           name: Merge chapters
           command: find chapters -type f -name "*.md" -exec cat {} \; > wage.md
