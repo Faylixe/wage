@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Download extra dependencies
-          command: apt-get install -y wget
+          command: apt-get update -y && apt-get install -y wget
       - run:
           name: Retrieve template
           command: |
