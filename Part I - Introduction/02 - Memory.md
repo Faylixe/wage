@@ -253,10 +253,10 @@ Which gives us the following decimal value :
 
 Thus you add 1 and set the sign as negative which gaves us _-43_.
 
-That's it ! Such test interface can now be reused for any test that covers a class which implements the **IMemoryStream**
-interface. This testing strategy will be used throughout all this project. We can now move to a deeper level, which is the
-
-**IMemoryBank** interface. Since **IMemoryBank** is an **IMemoryStream**, we can write a test interface for it which also
+That's it now let go back to testing ! Such test interface can now be reused for any test that covers a
+class which implements the **IMemoryStream** interface. This testing strategy will be used throughout all
+this project. We can now move to a deeper level, which is the **IMemoryBank** interface.
+Since **IMemoryBank** is an **IMemoryStream**, we can write a test interface for it which also
 extends the test interface associated to **IMemoryStream** as follows :
 
 ```java
