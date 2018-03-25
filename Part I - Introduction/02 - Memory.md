@@ -296,8 +296,8 @@ default void testBankOffset() {
 }
 ```
 
-We are done for the testing part, at least the generic part of it, and we can now move on writing actual
-code that will implement our interfaces and more effectivly, implement our emulator memory. keep in mind
+We are done for the testing part, at least the generic part of it. We can now move on writing actual
+code that will implement our interfaces and more effectivly implement our emulator memory. But keep in mind
 that some other concrete test class will be written as long as we write implementation class to validate
 them.
 
