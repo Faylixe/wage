@@ -76,4 +76,5 @@ unit test using standard *JUnit4* at least.
 
 TODO : CircleCI introduction.
 
+TODO : Codacy
 \newpage
