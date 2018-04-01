@@ -224,8 +224,7 @@ switching from binary representation to decimal one, here is the formula applied
 
 As you can see, we only compute a sum of 2<sup>n</sup> for each _n_ where corresponding bit positon is _settled_
 (where bit value is 1). The indexing order can vary depending on the target platform representation, this is
-the _bit endianness_. For gameboy as for many systems, the representation used is _little endian_ meaning that
-bit are indexed from _0_ to _n_ starting from left. Reverse order (starting from right) is the opposite _big endian_.
+the _bit endianness_ or _bit numbering_. 
 
 But here we are lucky as number fit the signed range of value a **byte** can offer. What happens for negative number ?
 Well the last bit (located at position 7) act as a sign flag so if such bit is settled, then the _two's complements_
