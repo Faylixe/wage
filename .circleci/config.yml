@@ -22,6 +22,6 @@ jobs:
           command: pandoc wage.md metadata.yml -o documents/wage.eisvogel.pdf --from markdown --template wage --listings --toc
       - run:
           name: Build PDF (Original LaTeX)
-          command: pandoc wage.md metadata.yml -o documents/wage.pdf --from markdown --listings --toc
+          command: pandoc wage.md metadata.yml -o documents/wage.pdf --from markdown --listings --toc --highlight-style kate
       - store_artifacts:
           path: documents
