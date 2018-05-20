@@ -84,6 +84,3 @@ integration and associated services such as code quality evaluation, code covera
 | Apache maven | Compilation, testing, and code coverage report production | 
 | Codacy       | Code quality assesment                                    |
 
-The infrastructure synergy could be represented by the following schema :
-
-![process](/images/process.png)
