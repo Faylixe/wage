@@ -27,6 +27,8 @@ Another good thing is the choosen emulated platform : the gameboy. As we will se
 this target is at the same time small enough to suceed in achieving it, and big enough to walk through
 many skills.
 
+Sources and documentation can be found on the official repository : https://github.com/Faylixe/yage.
+
 ## Audience
 
 This books is a perfect match for intermediate software engineer whom want to assess themselves, as well
@@ -59,7 +61,7 @@ skill in the language you will choose. So weigh pros and cons about improving a 
 versus time it will take you to do the job, and motivation upkeep.
 
 This list is non-exhaustive as other items could be considered, such as the available tooling or existing
-implementation that can be used as reference. Final choice was arrested with *Java 9*.
+implementation that can be used as reference. Final choice was arrested with _Java 9_.
 
 ### Tooling
 
@@ -68,9 +70,9 @@ implementation that can be used as reference. Final choice was arrested with *Ja
 As we are not only exploring low level concept but also software engineering good practices, we will write
 and use unit testing during developpment. More than only be a good practice, it will be a perfect backup
 for you since an emulator is a complex system made of lot of part that you don't want to debug at the end.
-For writing and running unit tests as well as integration tests, we will use *JUnit5*, which brings lot
+For writing and running unit tests as well as integration tests, we will use _JUnit5_, which brings lot
 of new exciting features. Thus testing related part of this book will assume that you know how to write
-unit test using standard *JUnit4* at least.
+unit test using standard _JUnit4_ at least.
 
 #### Continuous integration
 
@@ -84,3 +86,4 @@ integration and associated services such as code quality evaluation, code covera
 | Apache maven | Compilation, testing, and code coverage report production | 
 | Codacy       | Code quality assesment                                    |
 
+You can explore associated dashboard through badge links in the repository _README_ file.
