@@ -14,14 +14,17 @@ jobs:
             mkdir -p ~/.pandoc/templates
             mkdir documents
             wget -O ~/.pandoc/templates/wage.latex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
+    - run:
+          name: Merge chapters (debug)
+          command: find chapters -type f -name "*.md"
       - run:
           name: Merge chapters
           command: find chapters -type f -name "*.md" -exec cat {} \; > wage.md
       - run:
           name: Build PDF (Eisvogel template)
-          command: pandoc wage.md -o documents/wage.eisvogel.pdf --from markdown --template wage --listings
+          command: pandoc wage.md -o documents/wage.eisvogel.pdf --from markdown --template wage --listings --toc
       - run:
           name: Build PDF (Original LaTeX)
-          command: pandoc wage.md -o documents/wage.pdf --from markdown --listings
+          command: pandoc wage.md -o documents/wage.pdf --from markdown --listings --toc --documentclass book
       - store_artifacts:
           path: documents
