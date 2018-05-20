@@ -25,7 +25,7 @@ memory, it puts the target memory address on the address bus and the target data
 Nothing more, nothing less.
 
 The address space is the range of addresses that can be reached through your address bus. In case of
-the gameboy, the address bus is 16-bit wide. Thus your memory address varies between 0 and 2<sup>16</sup> - 1, 
+the gameboy, the address bus is 16-bit wide. Thus your memory address varies between 0 and 2^16^ - 1, 
 so 65536 addresses available.
 
 ### Memory map
@@ -213,16 +213,16 @@ switching from binary representation to decimal one, here is the formula applied
 | ----------| --- | --- | --- | --- | --- | --- | --- | --- |
 | Value     | 1   | 0   | 1   | 0   | 1   | 0   | 1   | 0   |
 
-> 2<sup>0</sup> + 2<sup>2</sup> + 2<sup>4</sup> + 2<sup>6</sup> = 85
+> 2^0^ + 2^2^ + 2^4^ + 2^6^ = 85
 
 
 | Bit index | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | ----------| --- | --- | --- | --- | --- | --- | --- | --- |
 | Value     | 1   | 1   | 1   | 1   | 0   | 0   | 0   | 0   |
 
-> 2<sup>0</sup> + 2<sup>1</sup> + 2<sup>2</sup> + 2<sup>3</sup> = 15
+> 2^0^ + 2^1^ + 2^2^ + 2^3^ = 15
 
-As you can see, we only compute a sum of 2<sup>n</sup> for each _n_ where corresponding bit positon is _settled_
+As you can see, we only compute a sum of 2^n^ for each _n_ where corresponding bit positon is _settled_
 (where bit value is 1). The indexing order can vary depending on the target platform representation, this is
 the _bit endianness_ or _bit numbering_. 
 
@@ -238,7 +238,7 @@ through a concrete example with _0b10101011_ :
 
 If you don't care about the sign bit, well the corresponding value would be :
 
-> 2<sup>0</sup> + 2<sup>2</sup> + 2<sup>4</sup> + 2<sup>6</sup> + 2<sup>7</sup>= 213
+> 2^0^ + 2^2^ + 2^4^ + 2^6^ + 2^7^ = 213
 
 But since *Java* uses signed **byte**, what we do is reverting all bits :
 
@@ -248,7 +248,7 @@ But since *Java* uses signed **byte**, what we do is reverting all bits :
 
 Which gives us the following decimal value :
 
-> 2<sup>1</sup> + 2<sup>3</sup> + 2<sup>5</sup> = 42
+> 2^1^ + 2^3^ + 2^5^ = 42
 
 Thus you add 1 and set the sign as negative which gaves us _-43_.
 
