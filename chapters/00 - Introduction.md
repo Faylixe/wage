@@ -85,3 +85,5 @@ integration and associated services such as code quality evaluation, code covera
 | Codacy       | Code quality assesment                                    |
 
 You can explore associated dashboard through badge links in the repository _README_ file.
+
+/newline
