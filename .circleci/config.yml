@@ -14,7 +14,7 @@ jobs:
             mkdir -p ~/.pandoc/templates
             mkdir documents
             wget -O ~/.pandoc/templates/wage.latex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
-    - run:
+      - run:
           name: Merge chapters (debug)
           command: find chapters -type f -name "*.md"
       - run:
