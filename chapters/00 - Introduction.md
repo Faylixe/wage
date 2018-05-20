@@ -52,14 +52,14 @@ you need a fine control over primitive types used. Bit endianess, signed, unsign
 all those aspects will impact your code.
 - _Confort_, this point comes last but is maybe the most important one. As you are supposed to not be
 familiar with low level programming, you don't want to focus on language aspect, but rather on low
-level concept. Picking a language in which you are really confortable, will make you develop
+level concept. Picking a language in which you are really confortable with, will make you develop
 quicker, and doesn't get you discouraged when implementing any features. On the other hand, programming
 an emulator turns out to be an outstanding experience that will more than everything improve your coding
 skill in the language you will choose. So weigh pros and cons about improving a target language experience
 versus time it will take you to do the job, and motivation upkeep.
 
 This list is non-exhaustive as other items could be considered, such as the available tooling or existing
-implementation that can be used as reference. Final choice was arrested with *Java* (version 8).
+implementation that can be used as reference. Final choice was arrested with *Java 9*.
 
 ### Tooling
 
@@ -74,7 +74,16 @@ unit test using standard *JUnit4* at least.
 
 #### Continuous integration
 
-TODO : CircleCI introduction.
+We will not cover those topics in this book, at least the technical part, but this project used continuous
+integration and associated services such as code quality evaluation, code coverage by tests, through following services :
 
-TODO : Codacy
-\newpage
+| Service      | Description                                               |
+| ------------ | --------------------------------------------------------- |
+| Github       | Source versioning, issues tracker                         |
+| CircleCI     | Continous integration                                     |
+| Apache maven | Compilation, testing, and code coverage report production | 
+| Codacy       | Code quality assesment                                    |
+
+The infrastructure synergy could be represented by the following schema :
+
+![process](https://raw.githubusercontent.com/Faylixe/wage/master/images/process.png)
