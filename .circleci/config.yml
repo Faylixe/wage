@@ -17,7 +17,10 @@ jobs:
           name: Merge chapters
           command: find chapters -type f -name "*.md" -exec cat {} \; > wage.md
       - run:
-          name: Build PDF
-          command: pandoc wage.md -o wage.pdf --from markdown --template wage --listings
+          name: Build PDF (Eisvogel template)
+          command: pandoc wage.md -o wage.eisvogel.pdf --from markdown --template wage --listings
+      - run:
+          name: Build PDF (Original LaTeX)
+          command: pandoc wage.md -o wage.pdf --from markdown --listings
       - store_artifacts:
-          path: wage.pdf
+          path: wage*.pdf
