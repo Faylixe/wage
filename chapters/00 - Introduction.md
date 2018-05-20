@@ -86,4 +86,4 @@ integration and associated services such as code quality evaluation, code covera
 
 The infrastructure synergy could be represented by the following schema :
 
-![process](https://raw.githubusercontent.com/Faylixe/wage/master/images/process.png)
+![process](/images/process.png)
