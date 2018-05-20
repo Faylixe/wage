@@ -16,10 +16,10 @@ jobs:
             wget -O ~/.pandoc/templates/wage.latex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
       - run:
           name: Merge chapters (debug)
-          command: find chapters -type f -name "*.md"
+          command: find chapters -type f -name "*.md" | sort | xargs -I {} echo {}
       - run:
           name: Merge chapters
-          command: find chapters -type f -name "*.md" -exec cat {} \; > wage.md
+          command: find chapters -type f -name "*.md" | sort | xargs -I {} cat {} > wage.md
       - run:
           name: Build PDF (Eisvogel template)
           command: pandoc wage.md -o documents/wage.eisvogel.pdf --from markdown --template wage --listings --toc
