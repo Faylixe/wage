@@ -63,9 +63,7 @@ versus time it will take you to do the job, and motivation upkeep.
 This list is non-exhaustive as other items could be considered, such as the available tooling or existing
 implementation that can be used as reference. Final choice was arrested with _Java 9_.
 
-### Tooling
-
-#### Testing
+### Testing
 
 As we are not only exploring low level concept but also software engineering good practices, we will write
 and use unit testing during developpment. More than only be a good practice, it will be a perfect backup
@@ -74,7 +72,7 @@ For writing and running unit tests as well as integration tests, we will use _JU
 of new exciting features. Thus testing related part of this book will assume that you know how to write
 unit test using standard _JUnit4_ at least.
 
-#### Continuous integration
+### Continuous integration
 
 We will not cover those topics in this book, at least the technical part, but this project used continuous
 integration and associated services such as code quality evaluation, code coverage by tests, through following services :
