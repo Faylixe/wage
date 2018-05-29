@@ -30,7 +30,7 @@ Table: Instruction subset associated enumeration class
 We won't dive into each instruction set since GameBoy instruction set offer 512 instructions,
 but we will takes few representatives from each subset to understand the logic applied.
 
-To design such enumeration efficently we took the following idea : from a emulator point of view,
+To design such enumeration efficently we assumed the following idea : from an emulator point of view,
 the associated code of a given instruction should be able to access to each aspect of the hardware,
 namely :
 
