@@ -27,6 +27,12 @@ Table: Instruction subset associated enumeration class
 
 > TODO : Consider being more specific with description.
 
+Aggregating instruction into enumeration offer several advantages such as :
+
+- *Code lisibility* : you can separate easily instruction code and semantic.
+- *Debugging* : An named instruction entity in a JVM point of view allow to track it faster.
+- *Testing* : You can test each instance without effort, as long as you have an *execution context*.
+
 We won't dive into each instruction set since GameBoy instruction set offer 512 instructions,
 but we will takes few representatives from each subset to understand the logic applied.
 
@@ -71,3 +77,41 @@ public interface IInstruction extends IExecutableInstruction {
 
 The motivation behinds this separation of concern is the ability to define an instruction execution code
 as a lambda expression, or method reference since the first interface is designed as a functional one.
+
+### 8-bit load instruction set
+
+As a detailed example on how implementing an instruction set using *enumeration*, we will use the easiest one which is the
+8-bit load. Indeed, operation in this set only consist in copying value from and to either register or memory.
+
+The first step is to defined our empty instruction set using *decoration* pattern with the ``IInstruction`` interface :
+
+```java
+public enum ByteLoadInstructionSet implements IInstruction {
+
+	;
+	private short opcode;
+
+	private byte cycle;
+
+	private IExecutableInstruction executable;
+	
+	private ByteLoadInstructionSet(
+			int opcode,
+			int cycle,
+			IExecutableInstruction executable) {
+		this.opcode = (short) opcode;
+		this.cycle = (byte) cycle;
+		this.executable = executable;
+	}
+
+	@Override
+	public void execute(IExecutionContext context) throws IllegalAccessException {
+		executable.execute(context);
+	}
+
+	@Override public short getOpcode() { return opcode; }
+
+	@Override public byte getCycle() { return cycle; }
+
+}
+```
