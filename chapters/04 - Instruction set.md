@@ -112,7 +112,7 @@ public enum ByteLoadInstructionSet implements IInstruction {
 
 From this, the only effort is organisation ! Keep track of which instruction has been already implemented,
 tested, documented. In *YAGE*, order from the Gameboy CPU Manual has been picked, as for the enumeration
-grouping as well. Let's start with the first instruction : *LD nn,n*, which is defined as pushing the next
+grouping as well. Let's start with the first instruction : ``LD nn,n``, which is defined as pushing the next
 8-bit immediate value into a target 8-bit register. The instruction opcodes are described as following :
 
 | Instruction | Parameters | Opcode | Cycles |
@@ -123,3 +123,27 @@ grouping as well. Let's start with the first instruction : *LD nn,n*, which is d
 | LD          | E, n       | 1E     | 8      |
 | LD          | H, n       | 26     | 8      |
 | LD          | L, n       | 2E     | 8      |
+
+Table: LD nn,n
+
+Picking the first one, adding it to our enumeration is as simple as following :
+
+```java
+LD_B_NN(0x06, 8, context -> context.getRegister(B).set(context.nextByte())),
+```
+
+> Note that in order to use register name directly you will have to perform a static import
+> of the associated enumeration from ``IRegisterProvider`` interface.
+
+Continuing from that first version we can go for all the other one :
+
+```java
+LD_C_NN(0x0E, 8, context -> context.getRegister(C).set(context.nextByte())),
+LD_D_NN(0x16, 8, context -> context.getRegister(D).set(context.nextByte())),
+LD_E_NN(0x1E, 8, context -> context.getRegister(E).set(context.nextByte())),
+LD_H_NN(0x26, 8, context -> context.getRegister(H).set(context.nextByte())),
+LD_L_NN(0x2E, 8, context -> context.getRegister(L).set(context.nextByte())),
+```
+
+From now you have two options : implements each instruction variation for each available destination parameter,
+or offer a static factory method that creates ``IExecutableInstruction`` instance
