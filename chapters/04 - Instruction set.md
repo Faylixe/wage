@@ -135,7 +135,7 @@ LD_B_NN(0x06, 8, context -> context.getRegister(B).set(context.nextByte())),
 > Note that in order to use register name directly you will have to perform a static import
 > of the associated enumeration from ``IRegisterProvider`` interface.
 
-Continuing from that first version we can go for all the other one :
+Continuing from that first version we can go for all the others :
 
 ```java
 LD_C_NN(0x0E, 8, context -> context.getRegister(C).set(context.nextByte())),
@@ -145,5 +145,24 @@ LD_H_NN(0x26, 8, context -> context.getRegister(H).set(context.nextByte())),
 LD_L_NN(0x2E, 8, context -> context.getRegister(L).set(context.nextByte())),
 ```
 
-From now you have two options : implements each instruction variation for each available destination parameter,
-or offer a static factory method that creates ``IExecutableInstruction`` instance
+Congratulation ! You have implemented already six instructions of the Gameboy CPU. Although one flaw of this design
+is the code duplication, but i can be improved too : instead of writing code for each instruction variation
+you can choose to use a static factory method that will create the required ``IExecutableInstruction`` for a given
+set of parameter :
+
+```java
+static IExecutableInstruction copyNextValue(Register destination) {
+	return context -> context.getRegister(destination).set(context.nextByte());
+}
+```
+
+Using this factory we can rewrite our instructions as following :
+
+```java
+LD_B_NN(0x06, 8, copyNextValue(B)),
+LD_C_NN(0x0E, 8, copyNextValue(C)),
+LD_D_NN(0x16, 8, copyNextValue(D)),
+LD_E_NN(0x1E, 8, copyNextValue(E)),
+LD_H_NN(0x26, 8, copyNextValue(H)),
+LD_L_NN(0x2E, 8, copyNextValue(L)),
+```
