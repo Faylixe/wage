@@ -90,15 +90,10 @@ public enum ByteLoadInstructionSet implements IInstruction {
 
 	;
 	private short opcode;
-
 	private byte cycle;
-
 	private IExecutableInstruction executable;
 	
-	private ByteLoadInstructionSet(
-			int opcode,
-			int cycle,
-			IExecutableInstruction executable) {
+	private ByteLoadInstructionSet(int opcode, int cycle, IExecutableInstruction executable) {
 		this.opcode = (short) opcode;
 		this.cycle = (byte) cycle;
 		this.executable = executable;
@@ -110,7 +105,6 @@ public enum ByteLoadInstructionSet implements IInstruction {
 	}
 
 	@Override public short getOpcode() { return opcode; }
-
 	@Override public byte getCycle() { return cycle; }
 
 }
