@@ -210,39 +210,18 @@ the memory part should be updated in order to offer the whole address space, whe
 cell hold 0 value, and address from the ``IMemoryStreamTest`` are still preserved. An additional
 step is required due to the fact that all those inherited test component should
 be linked through ``IExecutionContext`` interface. We will then use mockito to bind parent
-interface mocks to the target contract using following static methods :
+interface mocks to the target contract using following static methods as the following example
+that shows *register provider* instance binding :
 
 ```java
-private static void bindMemoryStream(IExecutionContext context, IMemoryStream stream) {
-	try {
-		when(context.readByte(anyInt())).then(toAnswer(stream::readByte));
-		when(context.readBytes(anyInt(), anyInt())).then(toAnswer(stream::readBytes));
-		doAnswer(toAnswer(stream::writeByte)).when(context).writeByte(anyByte(), anyInt());
-		doAnswer(toAnswer(stream::writeBytes)).when(context).writeBytes(any(), anyInt());
-	}
-	catch (final IllegalAccessException e) {
-		fail(e);
-	}
-}
-
 private static void bindRegisterProvider(IExecutionContext context, IRegisterProvider provider) {
 	when(context.getRegister(any())).then(toAnswer(provider::getRegister));
 	when(context.getFlagsRegister()).then(toAnswer(provider::getFlagsRegister));
 	when(context.getExtendedRegister(any())).then(toAnswer(provider::getExtendedRegister));
 }
-
-private static void bindInstructionStream(IExecutionContext context, IInstructionStream stream) {
-	try {
-		when(context.nextByte()).then(toAnswer(stream::nextByte));
-		when(context.nextShort()).then(toAnswer(stream::nextShort));
-	}
-	catch (final IllegalAccessException e) {
-		fail(e);
-	}
-}
 ```
 
-Using all thoses factory, we can finally define a generic instruction test method
+Using all thoses factories, we can finally define a generic instruction test method
 that retrieves all testing instance, bind them to a mock ``IExecutionContext`` and
 transmit it to a user provided test. Basic attribute such as opcode and machine cycle
 are automatically tested to enforce mistyping detection :
@@ -269,6 +248,12 @@ default void performInstructionTest(
 		}
 	}
 ```
+
+As we have subset of instruction grouped into enumeration, test class will target a specific subset, and each
+test method will target a specific instruction, testing each parameters available using a *JUnit 5* feature named
+*Dynamic test*. *Dynamic test* allows to write method that acts as a test factory, which is in charge of
+creating a collection of test which are labelled with a given name. Using previously implemented instruction ``LD nn, n``
+such test factory would look like following :
 
 ```java
 @TestFactory
