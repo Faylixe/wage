@@ -26,3 +26,48 @@ through generic purpose interfaces. Here is the list of enumeration used and ava
 Table: Instruction subset associated enumeration class 
 
 > TODO : Consider being more specific with description.
+
+We won't dive into each instruction set since GameBoy instruction set offer 512 instructions,
+but we will takes few representatives from each subset to understand the logic applied.
+
+To design such enumeration efficently we took the following idea : from a emulator point of view,
+the associated code of a given instruction should be able to access to each aspect of the hardware,
+namely :
+
+- Instruction stream
+- Memory through address bus
+- CPU associated registers
+
+To avoid having method signature with lot of parameters, we need an interface that acts
+as a single entry point for all thoses components :
+
+```java
+public interface IExecutionContext extends IRegisterProvider, IInstructionStream, IMemoryStream {}
+```
+
+As you can see, an *execution context* only reuse previoulsy defined interfaces and does not
+need anymore effort. From this, we can define an instruction in an oriented object manner using
+following specification :
+
+- An instruction is mapped by an unique opcode.
+- An instruction is regulated by a fixed machine cycle number.
+- An instruction is defined as an executable code.
+
+We could go for a unique interface that groups those enumerated aspect, but we will split this contract in
+two parts : one that handles the instruction execution code, and another one on top of it that will offer
+the opcode and machine cycle :
+
+```java
+@FunctionalInterface
+public interface IExecutableInstruction {
+  void execute(IExecutionContext context) throws IllegalAccessException;
+}
+
+public interface IInstruction extends IExecutableInstruction {
+	short getOpcode();
+	byte getCycle();
+}
+```
+
+The motivation behinds this separation of concern is the ability to define an instruction execution code
+as a lambda expression, or method reference since the first interface is designed as a functional one.
