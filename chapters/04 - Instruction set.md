@@ -109,3 +109,17 @@ public enum ByteLoadInstructionSet implements IInstruction {
 
 }
 ```
+
+From this, the only effort is organisation ! Keep track of which instruction has been already implemented,
+tested, documented. In *YAGE*, order from the Gameboy CPU Manual has been picked, as for the enumeration
+grouping as well. Let's start with the first instruction : *LD nn,n*, which is defined as pushing the next
+8-bit immediate value into a target 8-bit register. The instruction opcodes are described as following :
+
+| Instruction | Parameters | Opcode | Cycles |
+| ----------- | ---------- | ------ | ------ |
+| LD          | B, n       | 06     | 8      |
+| LD          | C, n       | 0E     | 8      |
+| LD          | D, n       | 16     | 8      |
+| LD          | E, n       | 1E     | 8      |
+| LD          | H, n       | 26     | 8      |
+| LD          | L, n       | 2E     | 8      |
