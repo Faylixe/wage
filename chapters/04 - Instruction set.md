@@ -176,7 +176,10 @@ the *execution context* : memory, register and instruction stream.
 
 ```java
 @TestInstance(Lifecycle.PER_CLASS)
-public interface IInstructionSetTest extends IInstructionStreamTest, IMemoryStreamTest, IRegisterProviderTest {
+public interface IInstructionSetTest extends
+	IInstructionStreamTest,
+	IMemoryStreamTest,
+	IRegisterProviderTest {
 
 	@Override
 	default IRegisterProvider getTestRegisterProvider() {
@@ -184,28 +187,65 @@ public interface IInstructionSetTest extends IInstructionStreamTest, IMemoryStre
 	}
 
 	@Override
-	default IMemoryStream getTestMemoryStream() {
-		int size = (int) pow(2, 16);
-		AddressBus addressBus = new AddressBus(size);
-		addressBus.connect(IMemoryBankTest.createMemoryBankMock(TEST_OFFSET, 0));
-		addressBus.connect(IMemoryBankTest.createMemoryBankMock());
-		int offset = TEST_OFFSET + TEST_SIZE;
-		addressBus.connect(IMemoryBankTest.createMemoryBankMock(size - offset, offset));
-		return addressBus;
+	default IInstructionStream getTestInstructionStream() {
+		return IInstructionStreamTest.createMockInstructionStream();
 	}
 
 	@Override
-	default IInstructionStream getTestInstructionStream() {
-		return IInstructionStreamTest.createMockInstructionStream();
+	default IMemoryStream getTestMemoryStream() {
+		int size = (int) pow(2, 16);
+		AddressBus bus = new AddressBus(size);
+		bus.connect(IMemoryBankTest.createMemoryBankMock(TEST_OFFSET, 0));
+		bus.connect(IMemoryBankTest.createMemoryBankMock());
+		int offset = TEST_OFFSET + TEST_SIZE;
+		bus.connect(IMemoryBankTest.createMemoryBankMock(size - offset, offset));
+		return bus;
 	}
 
 }
 ```
 
-> Instruction stream and register testing contract can be used as in, but the memory part
-> should be updated in order to offer the whole address space, where each memory cell
-> hold 0 value, and address from the ``IMemoryStreamTest`` are still preserved.
+You can note that instruction stream and register testing contract can be used as in, but
+the memory part should be updated in order to offer the whole address space, where each memory
+cell hold 0 value, and address from the ``IMemoryStreamTest`` are still preserved. An additional
+step is required due to the fact that all those inherited test component should
+be linked through ``IExecutionContext`` interface. We will then use mockito to bind parent
+interface mocks to the target contract using following static methods :
 
+```java
+private static void bindMemoryStream(IExecutionContext context, IMemoryStream stream) {
+	try {
+		when(context.readByte(anyInt())).then(toAnswer(stream::readByte));
+		when(context.readBytes(anyInt(), anyInt())).then(toAnswer(stream::readBytes));
+		doAnswer(toAnswer(stream::writeByte)).when(context).writeByte(anyByte(), anyInt());
+		doAnswer(toAnswer(stream::writeBytes)).when(context).writeBytes(any(), anyInt());
+	}
+	catch (final IllegalAccessException e) {
+		fail(e);
+	}
+}
+
+private static void bindRegisterProvider(IExecutionContext context, IRegisterProvider provider) {
+	when(context.getRegister(any())).then(toAnswer(provider::getRegister));
+	when(context.getFlagsRegister()).then(toAnswer(provider::getFlagsRegister));
+	when(context.getExtendedRegister(any())).then(toAnswer(provider::getExtendedRegister));
+}
+
+private static void bindInstructionStream(IExecutionContext context, IInstructionStream stream) {
+	try {
+		when(context.nextByte()).then(toAnswer(stream::nextByte));
+		when(context.nextShort()).then(toAnswer(stream::nextShort));
+	}
+	catch (final IllegalAccessException e) {
+		fail(e);
+	}
+}
+```
+
+Using all thoses factory, we can finally define a generic instruction test method
+that retrieves all testing instance, bind them to a mock ``IExecutionContext`` and
+transmit it to a user provided test. Basic attribute such as opcode and machine cycle
+are automatically tested to enforce mistyping detection :
 
 ```java
 default void performInstructionTest(
@@ -228,77 +268,6 @@ default void performInstructionTest(
 			fail(e);
 		}
 	}
-
-	private static void bindMemoryStream(final IExecutionContext context, final IMemoryStream stream) {
-		try {
-			when(context.readByte(anyInt())).then(toAnswer(stream::readByte));
-			when(context.readBytes(anyInt(), anyInt())).then(toAnswer(stream::readBytes));
-			doAnswer(toAnswer(stream::writeByte)).when(context).writeByte(anyByte(), anyInt());
-			doAnswer(toAnswer(stream::writeBytes)).when(context).writeBytes(any(), anyInt());
-		}
-		catch (final IllegalAccessException e) {
-			fail(e);
-		}
-	}
-
-	/**
-	 * Binds the given mock execution <tt>context</tt> to
-	 * the given instruction <tt>stream</tt>
-	 * 
-	 * @param context Mock execution context to bind stream to.
-	 * @param stream Instruction stream to bind.
-	 */
-	private static void bindInstructionStream(final IExecutionContext context, final IInstructionStream stream) {
-		try {
-			when(context.nextByte()).then(toAnswer(stream::nextByte));
-			when(context.nextShort()).then(toAnswer(stream::nextShort));
-			// Note : sendByte not already considered.
-		}
-		catch (final IllegalAccessException e) {
-			fail(e);
-		}
-	}
-
-	/**
-	 * Binds the given mock execution <tt>context</tt> to
-	 * the given register <tt>provider</tt>
-	 * 
-	 * @param context Mock execution context to bind provider to.
-	 * @param provider Register provider to bind.
-	 */
-	private static void bindRegisterProvider(final IExecutionContext context, final IRegisterProvider provider) {
-		when(context.getRegister(any())).then(toAnswer(provider::getRegister));
-		when(context.getFlagsRegister()).then(toAnswer(provider::getFlagsRegister));
-		when(context.getExtendedRegister(any())).then(toAnswer(provider::getExtendedRegister));
-	}
-
-	/**
-	 * Factory method for creating test based on (HL) load operation.
-	 * 
-	 * @param target Target register that is loaded from (HL).
-	 * @return Built test.
-	 */
-	static ThrowingConsumer<IExecutionContext> createMemoryReadTest(final int address, final byte expected, final Register target) {
-		return context -> {
-			createRegistersTest(target, expected).accept(context);
-			verify(context, times(1)).readByte(address);
-		};
-	}
-
-	/**
-	 * Factory method that creates a test related to (HL) writring.
-	 * 
-	 * @param expected Expected value to be written to (HL).
-	 * @return Built test.
-	 */
-	static ThrowingConsumer<IExecutionContext> createMemoryWriteTest(final int address, final byte expected) {
-		return context -> {
-			createRegistersTest().accept(context);
-			verify(context, times(1)).writeByte(expected, address);
-		};
-	}
-
-}
 ```
 
 ```java
